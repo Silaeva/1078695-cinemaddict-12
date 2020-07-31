@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Anna Silaeva](https://up.htmlacademy.ru/ecmascript/12/user/1078695).
-* Наставник: `Неизвестно`.
+* Наставник: [Иван Шалагин](https://htmlacademy.ru/profile/id386947).
 
 ---
 
