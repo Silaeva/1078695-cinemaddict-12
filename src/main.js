@@ -39,32 +39,29 @@ const createSortimgTemplate = () => {
 const createFilmsSectionTemplate = () => {
   return (
     `<section class="films">
-      <section class="films-list">
-        <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-
-        <div class="films-list__container">
-        </div>
-
-      </section>
-
-      <section class="films-list--extra">
-        <h2 class="films-list__title">Top rated</h2>
-
-        <div class="films-list__container">
-
-        </div>
-      </section>
-
-      <section class="films-list--extra">
-        <h2 class="films-list__title">Most commented</h2>
-
-        <div class="films-list__container">
-
-        </div>
-     </section>
     </section>`
   )
 };
+
+const createFilmsListElement = () => {
+  return (
+    `<section class="films-list">
+    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+    <div class="films-list__container">
+    </div>
+  </section>`
+  )
+}
+
+const createExtraFilmsList = (title) => {
+  return (
+    `<section class="films-list--extra">
+    <h2 class="films-list__title">${title}</h2>
+    <div class="films-list__container">
+    </div>
+  </section>`
+  )
+}
 
 const createFilmCardTemplate = () => {
   return (
@@ -115,6 +112,9 @@ render(siteMainElement, createSortimgTemplate());
 render(siteMainElement, createFilmsSectionTemplate());
 
 const filmsElement = siteMainElement.querySelector(`.films`);
+
+render(filmsElement, createFilmsListElement());
+
 const filmsListElement = filmsElement.querySelector(`.films-list`);
 const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
@@ -123,6 +123,9 @@ for (let i = 0; i < CARDS_COUNT; i++) {
 }
 
 render(filmsListElement, createShowMoreButtonTemplate());
+
+render(filmsElement, createExtraFilmsList(`Top rated`));
+render(filmsElement, createExtraFilmsList(`Most commented`));
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
 
