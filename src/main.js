@@ -1,4 +1,4 @@
-"use strict";
+
 
 const CARDS_COUNT = 5;
 const EXTRA_CARDS_COUNT = 2;
@@ -9,7 +9,7 @@ const createUserProfileTemplate = () => {
     <p class="profile__rating">Movie Buff</p>
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`
-  )
+  );
 };
 
 const createMenuTemplate = () => {
@@ -23,7 +23,7 @@ const createMenuTemplate = () => {
     </div>
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`
-  )
+  );
 };
 
 const createSortimgTemplate = () => {
@@ -33,14 +33,14 @@ const createSortimgTemplate = () => {
     <li><a href="#" class="sort__button">Sort by date</a></li>
     <li><a href="#" class="sort__button">Sort by rating</a></li>
   </ul>`
-  )
+  );
 };
 
 const createFilmsSectionTemplate = () => {
   return (
     `<section class="films">
     </section>`
-  )
+  );
 };
 
 const createFilmsListElement = () => {
@@ -50,8 +50,8 @@ const createFilmsListElement = () => {
     <div class="films-list__container">
     </div>
   </section>`
-  )
-}
+  );
+};
 
 const createExtraFilmsList = (title) => {
   return (
@@ -60,8 +60,8 @@ const createExtraFilmsList = (title) => {
     <div class="films-list__container">
     </div>
   </section>`
-  )
-}
+  );
+};
 
 const createFilmCardTemplate = () => {
   return (
@@ -82,19 +82,19 @@ const createFilmCardTemplate = () => {
       <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
     </form>
   </article>`
-  )
+  );
 };
 
 const createShowMoreButtonTemplate = () => {
   return (
     `<button class="films-list__show-more">Show more</button>`
-  )
+  );
 };
 
 const createStatisticsTemplate = () => {
   return (
     `<p>130 291 movies inside</p>`
-  )
+  );
 };
 
 const siteHeaderElement = document.querySelector(`.header`);
@@ -129,7 +129,7 @@ render(filmsElement, createExtraFilmsList(`Most commented`));
 
 const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
 
-filmsListExtraElements.forEach(item => {
+filmsListExtraElements.forEach((item) => {
   const filmsExtraContainerElement = item.querySelector(`.films-list__container`);
   for (let i = 0; i < EXTRA_CARDS_COUNT; i++) {
     render(filmsExtraContainerElement, createFilmCardTemplate());
