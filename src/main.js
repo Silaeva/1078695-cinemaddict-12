@@ -7,9 +7,14 @@ import {createFilmsListExtraTemplate} from "./view/films-list-extra.js";
 import {createFilmCardTemplate} from "./view/film-card.js";
 import {createShowMoreButtonTemplate} from "./view/show-more-button.js";
 import {createStatisticsTemplate} from "./view/statistics.js";
+import {generateFilmCard} from "./mock/film-card.js";
+import {generateComments} from "./mock/comment.js";
+import {CARDS_COUNT, EXTRA_CARDS_COUNT} from "./const.js";
+import {getRandomInteger} from "./utils.js";
 
-const CARDS_COUNT = 5;
-const EXTRA_CARDS_COUNT = 2;
+const comments = generateComments(getRandomInteger(0, 5));
+
+const filmCards = new Array(CARDS_COUNT).fill().map(generateFilmCard);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -33,7 +38,7 @@ const filmsListElement = filmsElement.querySelector(`.films-list`);
 const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < CARDS_COUNT; i++) {
-  render(filmsListContainerElement, createFilmCardTemplate());
+  render(filmsListContainerElement, createFilmCardTemplate(filmCards[i]));
 }
 
 render(filmsListElement, createShowMoreButtonTemplate());
@@ -46,7 +51,7 @@ const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra
 filmsListExtraElements.forEach((item) => {
   const filmsExtraContainerElement = item.querySelector(`.films-list__container`);
   for (let i = 0; i < EXTRA_CARDS_COUNT; i++) {
-    render(filmsExtraContainerElement, createFilmCardTemplate());
+    render(filmsExtraContainerElement, createFilmCardTemplate(filmCards[i]));
   }
 });
 
