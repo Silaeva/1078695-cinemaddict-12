@@ -2,19 +2,24 @@ import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanize
 import {TITLES, YEARS, DURATIONS, GENRES, POSTERS, DESCRIPTIONS, AGE_RATINGS, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const.js";
 import {generateComments} from "./comment.js";
 
+const generateFilmCards = (number) => {
+  return new Array(number).fill().map(generateFilmCard);
+};
+
 const generateFilmCard = () => {
   return {
     title: getRandomItem(TITLES),
+    titleOriginal: getRandomItem(TITLES),
     rating: `${getRandomInteger(1, 9)}.${getRandomInteger(1, 9)}`,
     year: getRandomItem(YEARS),
     duration: getRandomItem(DURATIONS),
-    genre: getRandomArray(GENRES, 1, 5).join(` `),
-    poster: `./images/posters/${getRandomItem(POSTERS)}`,
+    genres: getRandomArray(GENRES, 1, 5),
+    poster: getRandomItem(POSTERS),
     description: getRandomArray(DESCRIPTIONS, 1, 5).join(` `),
     comments: generateComments(getRandomInteger(0, 5)).length,
     ageRating: getRandomItem(AGE_RATINGS),
     director: getRandomItem(DIRECTORS),
-    writer: getRandomArray(WRITERS, 1, 5).join(`, `),
+    writers: getRandomArray(WRITERS, 1, 5).join(`, `),
     actors: getRandomArray(ACTORS, 1, 5).join(`, `),
     releaseDate: humanizeDate(getRandomDate(new Date(getRandomItem(YEARS), 0, 1), new Date())),
     country: getRandomItem(COUNTRIES),
@@ -24,4 +29,4 @@ const generateFilmCard = () => {
   };
 };
 
-export {generateFilmCard};
+export {generateFilmCards};

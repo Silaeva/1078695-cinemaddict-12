@@ -1,5 +1,10 @@
-const CARDS_COUNT = 5;
-const EXTRA_CARDS_COUNT = 2;
+const CountCards = {
+  ALL: 23,
+  PER_STEP: 5,
+  EXTRA: 2
+};
+
+const ESC_KEY_CODE = 27;
 
 const TITLES = [
   `The Dance of Life`,
@@ -12,7 +17,7 @@ const TITLES = [
 ];
 const YEARS = [`1929`, `1933`, `1955`, `1964`, `1936`, `1945`, `1939`];
 const DURATIONS = [`1h 55m`, `54m`, `1h 59m`, `1h 21m`, `16m`, `1h 18m`, `1h 32m`];
-const GENRES = [`Musical`, `Western`, `Drama`, `Comedy`, `Cartoon`, `Mystery`];
+const GENRES = [`Musical`, `Western`, `Drama`, `Comedy`, `Cartoon`, `Mystery`, `Film-Noir`];
 const POSTERS = [
   `the-dance-of-life.jpg`,
   `sagebrush-trail.jpg`,
@@ -23,6 +28,7 @@ const POSTERS = [
   `made-for-each-other.png`
 ];
 
+const MAX_DESCRIPTION_LENGTH = 140;
 const DESCRIPTIONS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
@@ -36,9 +42,9 @@ const DESCRIPTIONS = [
   `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
-const EMOTIONS = [`angry.png`, `puke.png`, `sleeping.png`, `smile.png`];
+const EMOTIONS = [`angry`, `puke`, `sleeping`, `smile`];
 
-const COMMENTS_TEXTS = [`Not good, not bad`, `Awesome`, `This movie is disgusting!`, `I loooove this movie!`, `meh..`, `Im shocked! SHOKED!`, `It could be better`, `Best movie eveeeeer`, `haba haba`, `booooooooring`];
+const COMMENTS_TEXTS = [`Not good, not bad`, `Awesome`, `This movie is disgusting!`, `I loooove this movie!`, `meh..`, `Very very old. Meh`, `Im shocked! SHOСKED!`, `It could be better`, `Best movie eveeeeer`, `haba haba`, `booooooooring`, `Interesting setting and a good cast`, `Almost two hours? Seriously?`, `WTF IS THIS??`];
 
 const AUTHORS = [`Anna Silaeva`, `Anna Poluektova`, `Anna Mauta`, `Veronica Sts`, `Eleonora Titarenko`, `Aleksandra`, `Julie`, `Tina Kuzmenko`, `Sealione`, `Vesnushkaaaa`];
 
@@ -51,4 +57,4 @@ const ACTORS = [`Tom Hardy`, `Chris Hemsworth`, `Robert Downey Jr.`, `Benedict C
 
 const COUNTRIES = [`USA`, `Australia`, `Japan`, `Spain`, `UK`, `Russia`];
 
-export {CARDS_COUNT, EXTRA_CARDS_COUNT, TITLES, YEARS, DURATIONS, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, AGE_RATINGS, DIRECTORS, WRITERS, ACTORS, COUNTRIES};
+export {TITLES, YEARS, DURATIONS, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, AGE_RATINGS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards};

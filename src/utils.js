@@ -1,3 +1,5 @@
+import {MAX_DESCRIPTION_LENGTH} from "./const.js";
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -18,18 +20,20 @@ const getRandomItem = (items) => {
   return items[randomIndex];
 };
 
-const getFormattedDate = () => {
-  const currentDate = new Date();
-  return `${currentDate.getFullYear()}/${currentDate.getMonth() + 1}/${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
-};
-
 const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
-
 
 const humanizeDate = (date) => {
   return date.toLocaleString(`en-US`, {day: `numeric`, month: `long`, year: `numeric`});
 };
 
-export {getRandomInteger, getRandomArray, getRandomItem, getFormattedDate, getRandomDate, humanizeDate};
+const cropDescription = (text) => {
+  if (text.length > MAX_DESCRIPTION_LENGTH) {
+    return text.slice(0, MAX_DESCRIPTION_LENGTH) + `...`;
+  } else {
+    return text;
+  }
+};
+
+export {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate, cropDescription};
