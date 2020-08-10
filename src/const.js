@@ -15,9 +15,9 @@ const TITLES = [
   `The Great Flamarion`,
   `Made for Each Other`
 ];
-const YEARS = [`1929`, `1933`, `1955`, `1964`, `1936`, `1945`, `1939`];
-const DURATIONS = [`1h 55m`, `54m`, `1h 59m`, `1h 21m`, `16m`, `1h 18m`, `1h 32m`];
+
 const GENRES = [`Musical`, `Western`, `Drama`, `Comedy`, `Cartoon`, `Mystery`, `Film-Noir`];
+
 const POSTERS = [
   `the-dance-of-life.jpg`,
   `sagebrush-trail.jpg`,
@@ -48,13 +48,12 @@ const COMMENTS_TEXTS = [`Not good, not bad`, `Awesome`, `This movie is disgustin
 
 const AUTHORS = [`Anna Silaeva`, `Anna Poluektova`, `Anna Mauta`, `Veronica Sts`, `Eleonora Titarenko`, `Aleksandra`, `Julie`, `Tina Kuzmenko`, `Sealione`, `Vesnushkaaaa`];
 
-const AGE_RATINGS = [`0+`, `6+`, `12+`, `16+`, `18+`];
-
 const DIRECTORS = [`Alfred Hitchcock`, `Stanley Kubrick`, `Martin Scorsese`, `Steven Spielberg`, `Quentin Tarantino`];
 
 const WRITERS = [`Billy Wilder`, `Ethan Coen and Joel Coen`, `Robert Towne`, `Francis Ford Coppola`, `Charlie Kaufman`];
+
 const ACTORS = [`Tom Hardy`, `Chris Hemsworth`, `Robert Downey Jr.`, `Benedict Cumberbatch`, `Joseph Gordon-Levitt`, `Jason Momoa`, `Heath Ledger`, `Margot Robbie`, `Blake Lively`, `Megan Fox`, `Yvonne Strahovski`, `Charlize Theron`];
 
 const COUNTRIES = [`USA`, `Australia`, `Japan`, `Spain`, `UK`, `Russia`];
 
-export {TITLES, YEARS, DURATIONS, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, AGE_RATINGS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards};
+export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards};

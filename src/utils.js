@@ -36,4 +36,10 @@ const cropDescription = (text) => {
   }
 };
 
-export {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate, cropDescription};
+const getMovieDuration = (ms) => {
+  const hours = Math.floor(ms / 3600000);
+  const minutes = Math.floor((ms % 3600000) / 60000);
+  return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
+};
+
+export {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate, cropDescription, getMovieDuration};

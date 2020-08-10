@@ -7,15 +7,12 @@ import {createFilmsListExtraTemplate} from "./view/films-list-extra.js";
 import {createFilmCardTemplate} from "./view/film-card.js";
 import {createShowMoreButtonTemplate} from "./view/show-more-button.js";
 import {createStatisticsTemplate} from "./view/statistics.js";
-import {createFilmDetails} from "./view/details-film.js";
-import {createCommentsTamplate} from "./view/comment.js";
+import {createFilmDetailsTemplate} from "./view/details-film.js";
 import {generateFilmCards} from "./mock/film-card.js";
-import {generateComments} from "./mock/comment.js";
 import {generateFilter, filmCardsToFilter} from "./mock/filter.js";
 import {CountCards, ESC_KEY_CODE} from "./const.js";
-import {getRandomInteger} from "./utils.js";
 
-const comments = generateComments(getRandomInteger(0, 5));
+// const comments = generateComments(getRandomInteger(0, 5));
 
 const filmCards = generateFilmCards(CountCards.ALL);
 
@@ -67,46 +64,39 @@ if (filmCards.length > CountCards.PER_STEP) {
   });
 }
 
-render(filmsElement, createFilmsListExtraTemplate(`Top rated`));
-render(filmsElement, createFilmsListExtraTemplate(`Most commented`));
+const topRatedClass = `top-rated`;
+const moctCommentedClass = `most-commented`;
+render(filmsElement, createFilmsListExtraTemplate(`Top rated`, topRatedClass));
+render(filmsElement, createFilmsListExtraTemplate(`Most commented`, moctCommentedClass));
 
-const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
+const topRatedContainer = filmsElement.querySelector(`.films-list__container--top-rated`);
+const mostCommentedContainer = filmsElement.querySelector(`.films-list__container--most-commented`);
 
-filmsListExtraElements.forEach((item) => {
-  const filmsExtraContainerElement = item.querySelector(`.films-list__container`);
-  for (let i = 0; i < CountCards.EXTRA; i++) {
-    render(filmsExtraContainerElement, createFilmCardTemplate(filmCards[i]));
-  }
-});
+const topRatedFilmCards = filmCards.slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
+const mostCommentedFilmCards = filmCards.slice().sort((a, b) => b.commentsCount - a.commentsCount).splice(0, CountCards.EXTRA);
 
-render(footerStatisticsElement, createStatisticsTemplate(filmCards.length));
-
-const filmCardElements = siteMainElement.querySelectorAll(`.film-card`);
+topRatedFilmCards.forEach((filmCard) => render(topRatedContainer, createFilmCardTemplate(filmCard)));
+mostCommentedFilmCards.forEach((filmCard) => render(mostCommentedContainer, createFilmCardTemplate(filmCard)));
 
 const openPopup = () => {
-  render(siteMainElement, createFilmDetails(filmCards[0]));
+  render(siteMainElement, createFilmDetailsTemplate(filmCards[0]));
+
   const filmDetails = siteMainElement.querySelector(`.film-details`);
-
-
-  const commentsListElement = filmDetails.querySelector(`.film-details__comments-list`);
-
-  render(commentsListElement, createCommentsTamplate(comments));
-
   const filmDetailsBtnClose = filmDetails.querySelector(`.film-details__close-btn`);
+
   filmDetailsBtnClose.addEventListener(`click`, () => filmDetails.remove());
   document.addEventListener(`keydown`, (evt) => evt.keyCode === ESC_KEY_CODE ? filmDetails.remove() : ``);
 };
 
-filmCardElements.forEach((element) => {
-  element.addEventListener(`click`, (evt) => {
-    const target = evt.target;
+const filmCardClickHandler = (evt) => {
+  const target = evt.target;
+  if (target.classList.contains(`film-card__poster`) ||
+      target.classList.contains(`film-card__title`) ||
+      target.classList.contains(`film-card__comments`)) {
+    openPopup();
+  }
+};
 
-    if (target.classList.contains(`film-card__poster`) ||
-        target.classList.contains(`film-card__title`) ||
-        target.classList.contains(`film-card__comments`)) {
-      openPopup();
-    }
-  });
-});
+filmsElement.addEventListener(`click`, filmCardClickHandler);
 
-export {comments};
+render(footerStatisticsElement, createStatisticsTemplate(filmCards.length));

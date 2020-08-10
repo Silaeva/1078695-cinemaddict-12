@@ -1,7 +1,9 @@
-import {comments} from "../main.js";
+import {getMovieDuration} from "../utils.js";
+import {generateComments} from "../mock/comment.js";
+import {createCommentTemplate} from "./comment.js";
 
-const createFilmDetails = (filmCard) => {
-  const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating} = filmCard;
+const createFilmDetailsTemplate = (filmCard) => {
+  const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, commentsCount} = filmCard;
 
   const genreTitle = genres.length > 1 ? `genres` : `genre`;
 
@@ -10,6 +12,9 @@ const createFilmDetails = (filmCard) => {
   };
 
   const isChecked = (boolean) => boolean ? `checked` : ``;
+
+  const comments = generateComments(commentsCount);
+  const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
 
   return (
     `<section class="film-details">
@@ -22,7 +27,7 @@ const createFilmDetails = (filmCard) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">${ageRating}</p>
+          <p class="film-details__age">${ageRating}+</p>
         </div>
 
         <div class="film-details__info">
@@ -56,7 +61,7 @@ const createFilmDetails = (filmCard) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${getMovieDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -90,9 +95,9 @@ const createFilmDetails = (filmCard) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
         <ul class="film-details__comments-list">
-
+        ${commentsTemplate}
         </ul>
         <div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label"></div>
@@ -130,4 +135,4 @@ const createFilmDetails = (filmCard) => {
   );
 };
 
-export {createFilmDetails};
+export {createFilmDetailsTemplate};

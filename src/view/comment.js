@@ -1,8 +1,4 @@
-const createCommentsTamplate = (comments) => {
-  return comments.map((comment) => createCommentTamplate(comment)).join(``);
-};
-
-const createCommentTamplate = (comment) => {
+const createCommentTemplate = (comment) => {
   const {text, emotion, author, date} = comment;
 
   return (
@@ -22,4 +18,4 @@ const createCommentTamplate = (comment) => {
   );
 };
 
-export {createCommentsTamplate};
+export {createCommentTemplate};
