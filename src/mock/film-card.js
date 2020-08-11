@@ -1,5 +1,6 @@
 import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate} from "../utils.js";
 import {TITLES, GENRES, POSTERS, DESCRIPTIONS, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const.js";
+import {generateComments} from "../mock/comment.js";
 
 const generateFilmCards = (number) => {
   return new Array(number).fill().map(generateFilmCard);
@@ -15,7 +16,7 @@ const generateFilmCard = () => {
     genres: getRandomArray(GENRES, 1, 3),
     poster: getRandomItem(POSTERS),
     description: getRandomArray(DESCRIPTIONS, 1, 5).join(` `),
-    commentsCount: getRandomInteger(0, 5),
+    comments: generateComments(getRandomInteger(0, 5)),
     ageRating: getRandomInteger(0, 18),
     director: getRandomItem(DIRECTORS),
     writers: getRandomArray(WRITERS, 1, 5).join(`, `),

@@ -1,9 +1,8 @@
 import {getMovieDuration} from "../utils.js";
-import {generateComments} from "../mock/comment.js";
 import {createCommentTemplate} from "./comment.js";
 
 const createFilmDetailsTemplate = (filmCard) => {
-  const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, commentsCount} = filmCard;
+  const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
 
   const genreTitle = genres.length > 1 ? `genres` : `genre`;
 
@@ -13,7 +12,6 @@ const createFilmDetailsTemplate = (filmCard) => {
 
   const isChecked = (boolean) => boolean ? `checked` : ``;
 
-  const comments = generateComments(commentsCount);
   const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
 
   return (
@@ -95,7 +93,7 @@ const createFilmDetailsTemplate = (filmCard) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
         <ul class="film-details__comments-list">
         ${commentsTemplate}
         </ul>
