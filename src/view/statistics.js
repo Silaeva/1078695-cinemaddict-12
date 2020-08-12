@@ -1,6 +1,6 @@
-const createStatisticsTemplate = () => {
+const createStatisticsTemplate = (count) => {
   return (
-    `<p>130 291 movies inside</p>`
+    `<p>${count} movies inside</p>`
   );
 };
 
