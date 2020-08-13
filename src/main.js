@@ -1,18 +1,18 @@
-import {createUserProfileTemplate} from "./view/user-profile.js";
-import {createFilterTemplate} from "./view/filter.js";
-import {createSortimgTemplate} from "./view/sorting.js";
-import {createFilmsSectionTemplate} from "./view/films-section.js";
-import {createFilmsListTemplate} from "./view/films-list.js";
-import {createFilmsListExtraTemplate} from "./view/films-list-extra.js";
-import {createFilmCardTemplate} from "./view/film-card.js";
-import {createShowMoreButtonTemplate} from "./view/show-more-button.js";
-import {createStatisticsTemplate} from "./view/statistics.js";
-import {createFilmDetailsTemplate} from "./view/details-film.js";
+import UserProfileView from "./view/user-profile.js";
+import FilterView from "./view/filter.js";
+import SortView from "./view/sort.js";
+import FilmsSectionView from "./view/films-section.js";
+import FilmsListView from "./view/films-list.js";
+import FilmsListTopRatedView from "./view/films-list-top-rated.js"; //
+import FilmsListMostCommentedView from "./view/films-list-most-commented.js"; //
+import FilmCardView from "./view/film-card.js";
+import ShowMoreButtonView from "./view/show-more-button.js";
+import StatisticsView from "./view/statistics.js";
+import DetailsFilm from "./view/details-film.js";
 import {generateFilmCards} from "./mock/film-card.js";
 import {generateFilter, filmCardsToFilter} from "./mock/filter.js";
 import {CountCards, ESC_KEY_CODE} from "./const.js";
-
-// const comments = generateComments(getRandomInteger(0, 5));
+import {renderElement} from "./utils.js";
 
 const filmCards = generateFilmCards(CountCards.ALL);
 
@@ -22,81 +22,88 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
+renderElement(siteHeaderElement, new UserProfileView(filmCardsToFilter.history(filmCards)).getElement()); // НЕ ОТРИСОВЫВАЕТСЯ!!!!!!!!!!!!!!!!!!
 
-render(siteHeaderElement, createUserProfileTemplate(filmCardsToFilter.history(filmCards)));
+renderElement(siteMainElement, new FilterView(filters).getElement());
+renderElement(siteMainElement, new SortView().getElement());
 
-render(siteMainElement, createFilterTemplate(filters));
-render(siteMainElement, createSortimgTemplate());
-render(siteMainElement, createFilmsSectionTemplate());
+const filmsSectionComponent = new FilmsSectionView();
+renderElement(siteMainElement, filmsSectionComponent.getElement());
 
-const filmsElement = siteMainElement.querySelector(`.films`);
+const filmsListComponent = new FilmsListView();
+renderElement(filmsSectionComponent.getElement(), filmsListComponent.getElement());
 
-render(filmsElement, createFilmsListTemplate());
-
-const filmsListElement = filmsElement.querySelector(`.films-list`);
-const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
+const filmsListContainerElement = filmsListComponent.getElement().querySelector(`.films-list__container`);
 
 for (let i = 0; i < Math.min(filmCards.length, CountCards.PER_STEP); i++) {
-  render(filmsListContainerElement, createFilmCardTemplate(filmCards[i]));
+  renderElement(filmsListContainerElement, new FilmCardView(filmCards[i]).getElement());
 }
 
 if (filmCards.length > CountCards.PER_STEP) {
   let renderedFilmCards = CountCards.PER_STEP;
 
-  render(filmsListElement, createShowMoreButtonTemplate());
+  const showMoreButtonComponent = new ShowMoreButtonView();
+  renderElement(filmsListComponent.getElement(), showMoreButtonComponent.getElement());
 
-  const showMoreButton = filmsListElement.querySelector(`.films-list__show-more`);
-
-  showMoreButton.addEventListener(`click`, (evt) => {
+  showMoreButtonComponent.getElement().addEventListener(`click`, (evt) => {
     evt.preventDefault();
     filmCards
-    .slice(renderedFilmCards, renderedFilmCards + CountCards.PER_STEP)
-    .forEach((filmCard) => render(filmsListContainerElement, createFilmCardTemplate(filmCard)));
+      .slice(renderedFilmCards, renderedFilmCards + CountCards.PER_STEP)
+      .forEach((filmCard) => renderElement(filmsListContainerElement, new FilmCardView(filmCard).getElement()));
 
     renderedFilmCards += CountCards.PER_STEP;
 
     if (renderedFilmCards >= filmCards.length) {
-      showMoreButton.remove();
+      showMoreButtonComponent.getElement().remove();
+      showMoreButtonComponent.removeElement();
     }
   });
 }
 
-const topRatedClass = `top-rated`;
-const moctCommentedClass = `most-commented`;
-render(filmsElement, createFilmsListExtraTemplate(`Top rated`, topRatedClass));
-render(filmsElement, createFilmsListExtraTemplate(`Most commented`, moctCommentedClass));
+const filmsListTopRatedComponent = new FilmsListTopRatedView();
+const filmsListMostCommentedComponent = new FilmsListMostCommentedView();
 
-const topRatedContainer = filmsElement.querySelector(`.films-list__container--top-rated`);
-const mostCommentedContainer = filmsElement.querySelector(`.films-list__container--most-commented`);
+renderElement(filmsSectionComponent.getElement(), filmsListTopRatedComponent.getElement());
+renderElement(filmsSectionComponent.getElement(), filmsListMostCommentedComponent.getElement());
+
+const topRatedContainer = filmsListTopRatedComponent.getElement().querySelector(`.films-list__container`);
+const mostCommentedContainer = filmsListMostCommentedComponent.getElement().querySelector(`.films-list__container`);
 
 const topRatedFilmCards = filmCards.slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
-const mostCommentedFilmCards = filmCards.slice().sort((a, b) => b.commentsCount - a.commentsCount).splice(0, CountCards.EXTRA);
+const mostCommentedFilmCards = filmCards.slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
 
-topRatedFilmCards.forEach((filmCard) => render(topRatedContainer, createFilmCardTemplate(filmCard)));
-mostCommentedFilmCards.forEach((filmCard) => render(mostCommentedContainer, createFilmCardTemplate(filmCard)));
+topRatedFilmCards.forEach((filmCard) => renderElement(topRatedContainer, new FilmCardView(filmCard).getElement()));
+mostCommentedFilmCards.forEach((filmCard) => renderElement(mostCommentedContainer, new FilmCardView(filmCard).getElement()));
+
+renderElement(footerStatisticsElement, new StatisticsView(filmCards.length).getElement());
+
+// открытие попапа
 
 const openPopup = () => {
-  render(siteMainElement, createFilmDetailsTemplate(filmCards[0]));
+  const detailsFilmComponent = new DetailsFilm(filmCards[0]);
+  renderElement(siteMainElement, detailsFilmComponent.getElement());
 
-  const filmDetails = siteMainElement.querySelector(`.film-details`);
-  const filmDetailsBtnClose = filmDetails.querySelector(`.film-details__close-btn`);
+  const filmDetailsBtnClose = detailsFilmComponent.getElement().querySelector(`.film-details__close-btn`);
 
-  filmDetailsBtnClose.addEventListener(`click`, () => filmDetails.remove());
-  document.addEventListener(`keydown`, (evt) => evt.keyCode === ESC_KEY_CODE ? filmDetails.remove() : ``);
+  filmDetailsBtnClose.addEventListener(`click`, () => {
+    detailsFilmComponent.getElement().remove();
+    detailsFilmComponent.removeElement();
+  });
+  document.addEventListener(`keydown`, (evt) => {
+    if (evt.keyCode === ESC_KEY_CODE) {
+      detailsFilmComponent.getElement().remove();
+      detailsFilmComponent.removeElement();
+    }
+  });
 };
 
 const filmCardClickHandler = (evt) => {
   const target = evt.target;
   if (target.classList.contains(`film-card__poster`) ||
-      target.classList.contains(`film-card__title`) ||
-      target.classList.contains(`film-card__comments`)) {
+    target.classList.contains(`film-card__title`) ||
+    target.classList.contains(`film-card__comments`)) {
     openPopup();
   }
 };
 
-filmsElement.addEventListener(`click`, filmCardClickHandler);
-
-render(footerStatisticsElement, createStatisticsTemplate(filmCards.length));
+filmsSectionComponent.getElement().addEventListener(`click`, filmCardClickHandler);

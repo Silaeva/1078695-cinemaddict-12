@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createUserProfileTemplate = (count) => {
   let profileRating = ``;
 
@@ -17,4 +19,27 @@ const createUserProfileTemplate = (count) => {
   );
 };
 
-export {createUserProfileTemplate};
+class UserProfile {
+  constructor(count) {
+    this._element = null;
+    this._count = count;
+  }
+
+  getTemplate() {
+    return createUserProfileTemplate(this._count);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default UserProfile;

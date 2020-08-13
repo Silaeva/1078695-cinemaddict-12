@@ -1,4 +1,26 @@
-import {MAX_DESCRIPTION_LENGTH} from "./const.js";
+import {MAX_DESCRIPTION_LENGTH, RenderPosition} from "./const.js";
+
+const renderTemplate = (container, template, place = RenderPosition.BEFOREEND) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+const renderElement = (container, element, place = RenderPosition.BEFOREEND) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -42,4 +64,4 @@ const getMovieDuration = (ms) => {
   return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
 };
 
-export {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate, cropDescription, getMovieDuration};
+export {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate, cropDescription, getMovieDuration, renderTemplate, renderElement, createElement};

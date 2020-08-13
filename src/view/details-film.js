@@ -1,4 +1,4 @@
-import {getMovieDuration} from "../utils.js";
+import {getMovieDuration, createElement} from "../utils.js";
 import {createCommentTemplate} from "./comment.js";
 
 const createFilmDetailsTemplate = (filmCard) => {
@@ -133,4 +133,27 @@ const createFilmDetailsTemplate = (filmCard) => {
   );
 };
 
-export {createFilmDetailsTemplate};
+class DetailsFilm {
+  constructor(filmCard) {
+    this._element = null;
+    this._filmCard = filmCard;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._filmCard);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default DetailsFilm;

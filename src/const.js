@@ -4,6 +4,11 @@ const CountCards = {
   EXTRA: 2
 };
 
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 const ESC_KEY_CODE = 27;
 
 const TITLES = [
@@ -56,4 +61,4 @@ const ACTORS = [`Tom Hardy`, `Chris Hemsworth`, `Robert Downey Jr.`, `Benedict C
 
 const COUNTRIES = [`USA`, `Australia`, `Japan`, `Spain`, `UK`, `Russia`];
 
-export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards};
+export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards, RenderPosition};

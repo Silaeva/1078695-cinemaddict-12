@@ -1,22 +1,22 @@
 import {createElement} from "../utils.js";
 
-const createFilmsListTemplate = () => {
+const createFilmsListMostCommentedTemplate = () => {
   return (
-    `<section class="films-list">
-    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+    `<section class="films-list--extra">
+    <h2 class="films-list__title">Most commented</h2>
     <div class="films-list__container">
     </div>
   </section>`
   );
 };
 
-class FilmsList {
+class FilmsListMostCommented {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsListTemplate();
+    return createFilmsListMostCommentedTemplate();
   }
 
   getElement() {
@@ -32,4 +32,4 @@ class FilmsList {
   }
 }
 
-export default FilmsList;
+export default FilmsListMostCommented;
