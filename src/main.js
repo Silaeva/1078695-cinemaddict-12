@@ -9,6 +9,7 @@ import FilmCardView from "./view/film-card.js";
 import ShowMoreButtonView from "./view/show-more-button.js";
 import StatisticsView from "./view/statistics.js";
 import DetailsFilmView from "./view/details-film.js";
+import NoFilmsView from "./view/no-films.js";
 import {generateFilmCards} from "./mock/film-card.js";
 import {generateFilter} from "./mock/filter.js";
 import {CountCards, ESC_KEY_CODE} from "./const.js";
@@ -25,10 +26,15 @@ const watchedCount = (filters.filter((filter) => filter.name === `history`))[0].
 renderElement(siteHeaderElement, new UserProfileView(watchedCount).getElement());
 
 renderElement(siteMainElement, new FilterView(filters).getElement());
-renderElement(siteMainElement, new SortView().getElement());
 
 const filmsSectionComponent = new FilmsSectionView();
-renderElement(siteMainElement, filmsSectionComponent.getElement());
+
+if (filmCards.length === 0) {
+  renderElement(siteMainElement, new NoFilmsView().getElement());
+} else {
+  renderElement(siteMainElement, new SortView().getElement());
+  renderElement(siteMainElement, filmsSectionComponent.getElement());
+}
 
 const filmsListComponent = new FilmsListView();
 renderElement(filmsSectionComponent.getElement(), filmsListComponent.getElement());
@@ -55,18 +61,14 @@ const renderFilm = (container, filmCard) => {
     }
   };
 
-  filmCardComponent.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, () => {
+  const onFilmCardClick = () => {
     showDetails();
     document.addEventListener(`keydown`, onEscKeyDown);
-  });
-  filmCardComponent.getElement().querySelector(`.film-card__title`).addEventListener(`click`, () => {
-    showDetails();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-  filmCardComponent.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, () => {
-    showDetails();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
+  };
+
+  filmCardComponent.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onFilmCardClick);
+  filmCardComponent.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onFilmCardClick);
+  filmCardComponent.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onFilmCardClick);
 
   filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, () => {
     closeDetails();
