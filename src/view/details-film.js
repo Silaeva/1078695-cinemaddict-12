@@ -143,12 +143,12 @@ class DetailsFilm {
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate().trim());
-      this._getComments();
+      this._renderComments();
     }
     return this._element;
   }
 
-  _getComments() {
+  _renderComments() {
     const {comments} = this._filmCard;
     const commentsContainer = this.getElement().querySelector(`.film-details__comments-list`);
     comments.map((comment) => {

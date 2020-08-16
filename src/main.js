@@ -3,8 +3,8 @@ import FilterView from "./view/filter.js";
 import SortView from "./view/sort.js";
 import FilmsSectionView from "./view/films-section.js";
 import FilmsListView from "./view/films-list.js";
-import FilmsListTopRatedView from "./view/films-list-top-rated.js"; //
-import FilmsListMostCommentedView from "./view/films-list-most-commented.js"; //
+import FilmsListTopRatedView from "./view/films-list-top-rated.js";
+import FilmsListMostCommentedView from "./view/films-list-most-commented.js";
 import FilmCardView from "./view/film-card.js";
 import ShowMoreButtonView from "./view/show-more-button.js";
 import StatisticsView from "./view/statistics.js";
@@ -22,8 +22,12 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const watchedCount = (filters.filter((filter) => filter.name === `history`))[0].count;
-renderElement(siteHeaderElement, new UserProfileView(watchedCount).getElement());
+const filterHistoryCount = filters.reduce((newFilter, curfilter) => {
+  newFilter[curfilter.name] = curfilter.count;
+  return newFilter;
+}, {}).history;
+
+renderElement(siteHeaderElement, new UserProfileView(filterHistoryCount).getElement());
 
 renderElement(siteMainElement, new FilterView(filters).getElement());
 
