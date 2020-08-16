@@ -1,4 +1,4 @@
-import {cropDescription, getMovieDuration} from "../utils.js";
+import {cropDescription, getMovieDuration, createElement} from "../utils.js";
 
 const createFilmCardTemplate = (filmCard) => {
   const {title, rating, year, duration, genres, poster, description, comments, onWatchList, isWatched, isFavorite} = filmCard;
@@ -30,4 +30,27 @@ const createFilmCardTemplate = (filmCard) => {
   );
 };
 
-export {createFilmCardTemplate};
+class FilmCard {
+  constructor(filmCard) {
+    this._element = null;
+    this.filmCard = filmCard;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this.filmCard);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate().trim());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default FilmCard;

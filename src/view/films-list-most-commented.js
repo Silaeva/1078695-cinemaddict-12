@@ -1,18 +1,22 @@
 import {createElement} from "../utils.js";
 
-const createShowMoreButtonTemplate = () => {
+const createFilmsListMostCommentedTemplate = () => {
   return (
-    `<button class="films-list__show-more">Show more</button>`
+    `<section class="films-list--extra">
+    <h2 class="films-list__title">Most commented</h2>
+    <div class="films-list__container">
+    </div>
+  </section>`
   );
 };
 
-class ShowMoreButton {
+class FilmsListMostCommented {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemplate();
+    return createFilmsListMostCommentedTemplate();
   }
 
   getElement() {
@@ -28,4 +32,4 @@ class ShowMoreButton {
   }
 }
 
-export default ShowMoreButton;
+export default FilmsListMostCommented;

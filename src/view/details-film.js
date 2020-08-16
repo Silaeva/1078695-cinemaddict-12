@@ -1,5 +1,5 @@
-import {getMovieDuration} from "../utils.js";
-import {createCommentTemplate} from "./comment.js";
+import {getMovieDuration, createElement, renderElement} from "../utils.js";
+import CommentView from "../view/comment.js";
 
 const createFilmDetailsTemplate = (filmCard) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
@@ -11,8 +11,6 @@ const createFilmDetailsTemplate = (filmCard) => {
   };
 
   const isChecked = (boolean) => boolean ? `checked` : ``;
-
-  const commentsTemplate = comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
 
   return (
     `<section class="film-details">
@@ -95,7 +93,6 @@ const createFilmDetailsTemplate = (filmCard) => {
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
         <ul class="film-details__comments-list">
-        ${commentsTemplate}
         </ul>
         <div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label"></div>
@@ -133,4 +130,35 @@ const createFilmDetailsTemplate = (filmCard) => {
   );
 };
 
-export {createFilmDetailsTemplate};
+class DetailsFilm {
+  constructor(filmCard) {
+    this._element = null;
+    this._filmCard = filmCard;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._filmCard);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate().trim());
+      this._renderComments();
+    }
+    return this._element;
+  }
+
+  _renderComments() {
+    const {comments} = this._filmCard;
+    const commentsContainer = this.getElement().querySelector(`.film-details__comments-list`);
+    comments.map((comment) => {
+      return renderElement(commentsContainer, new CommentView(comment).getElement());
+    });
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default DetailsFilm;
