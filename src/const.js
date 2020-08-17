@@ -49,7 +49,19 @@ const DESCRIPTIONS = [
 
 const EMOTIONS = [`angry`, `puke`, `sleeping`, `smile`];
 
-const COMMENTS_TEXTS = [`Not good, not bad`, `Awesome`, `This movie is disgusting!`, `I loooove this movie!`, `meh..`, `Very very old. Meh`, `Im shocked! SHOСKED!`, `It could be better`, `Best movie eveeeeer`, `haba haba`, `booooooooring`, `Interesting setting and a good cast`, `Almost two hours? Seriously?`, `WTF IS THIS??`];
+const COMMENTS_TEXTS = [
+  `Not good, not bad`,
+  `Awesome`,
+  `This movie is disgusting!`,
+  `I loooove this movie!`,
+  `meh..`, `Very very old. Meh`,
+  `Im shocked! SHOСKED!`,
+  `It could be better`,
+  `Best movie eveeeeer`,
+  `haba haba`, `booooooooring`,
+  `Interesting setting and a good cast`,
+  `Almost two hours? Seriously?`,
+  `WTF IS THIS??`];
 
 const AUTHORS = [`Anna Silaeva`, `Anna Poluektova`, `Anna Mauta`, `Veronica Sts`, `Eleonora Titarenko`, `Aleksandra`, `Julie`, `Tina Kuzmenko`, `Sealione`, `Vesnushkaaaa`];
 
