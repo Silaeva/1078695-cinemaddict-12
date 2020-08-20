@@ -14,4 +14,13 @@ const getMovieDuration = (ms) => {
   return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
 };
 
-export {cropDescription, getMovieDuration};
+const sortFilmByDate = (filmA, filmB) => {
+  return filmB.year - filmA.year;
+};
+
+const sortFilmByRating = (filmA, filmB) => {
+  return filmB.rating - filmA.rating;
+};
+
+
+export {cropDescription, getMovieDuration, sortFilmByDate, sortFilmByRating};
