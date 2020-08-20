@@ -1,5 +1,7 @@
-import {getMovieDuration, createElement, renderElement} from "../utils.js";
+import {getMovieDuration} from "../utils/film.js";
+import {createElement, render} from "../utils/render.js";
 import CommentView from "../view/comment.js";
+import AbstractView from "./abstract.js";
 
 const createFilmDetailsTemplate = (filmCard) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
@@ -130,10 +132,11 @@ const createFilmDetailsTemplate = (filmCard) => {
   );
 };
 
-class DetailsFilm {
+class DetailsFilm extends AbstractView {
   constructor(filmCard) {
-    this._element = null;
+    super();
     this._filmCard = filmCard;
+    this._closeBtnHandler = this._closeBtnHandler.bind(this);
   }
 
   getTemplate() {
@@ -152,12 +155,18 @@ class DetailsFilm {
     const {comments} = this._filmCard;
     const commentsContainer = this.getElement().querySelector(`.film-details__comments-list`);
     comments.map((comment) => {
-      return renderElement(commentsContainer, new CommentView(comment).getElement());
+      return render(commentsContainer, new CommentView(comment));
     });
   }
 
-  removeElement() {
-    this._element = null;
+  _closeBtnHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setCloseBtnHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnHandler);
   }
 }
 

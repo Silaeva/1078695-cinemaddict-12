@@ -1,4 +1,4 @@
-import {getRandomItem, getRandomInteger} from "../utils.js";
+import {getRandomItem, getRandomInteger} from "../utils/common.js";
 import {COMMENTS_TEXTS, EMOTIONS, AUTHORS} from "../const.js";
 
 const addZero = (n) => n < 10 ? `0` + n : n;

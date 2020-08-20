@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate} from "../utils.js";
+import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate} from "../utils/common.js";
 import {TITLES, GENRES, POSTERS, DESCRIPTIONS, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const.js";
 import {generateComments} from "../mock/comment.js";
 
