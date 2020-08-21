@@ -129,7 +129,7 @@ class MovieList {
   }
 
   _clearFilmCardsList() {
-    this._filmsListComponent.getElement().innerHTML = ``;
+    this._filmsListComponent.getElement().querySelector(`.films-list__container`).innerHTML = ``;
     this._renderedFilmCards = CountCards.PER_STEP;
   }
 
