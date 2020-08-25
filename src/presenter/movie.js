@@ -4,13 +4,17 @@ import {render, append, remove, replace} from "../utils/render.js";
 import {ESC_KEY_CODE} from "../const.js";
 
 class Movie {
-  constructor(filmContainer) {
+  constructor(filmContainer, changeData) {
     this._filmListContainer = filmContainer;
+    this._changeData = changeData;
 
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
 
     this._onFilmCardClick = this._onFilmCardClick.bind(this);
+    this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
+    this._handleWatchedClick = this._handleWatchedClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onCloseBtnClick = this._onCloseBtnClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -25,10 +29,14 @@ class Movie {
     this._filmCardComponent = new FilmCardView(filmCard);
     this._filmDetailsComponent = new DetailsFilmView(filmCard);
 
-    const filmsListContainer = this._filmListContainer.getElement().querySelector(`.films-list__container`);
 
     this._filmCardComponent.setFilmClickHandler(this._onFilmCardClick);
+    this._filmCardComponent.setToWatchlistClickHandler(this._handleToWatchlistClick);
+    this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setCloseBtnHandler(this._onCloseBtnClick);
+
+    const filmsListContainer = this._filmListContainer.getElement().querySelector(`.films-list__container`);
 
     if (prevFilmCardComponent === null || prevFilmDetailsComponent === null) {
       render(filmsListContainer, this._filmCardComponent);
@@ -57,15 +65,6 @@ class Movie {
     append(this._mainContainer, this._filmDetailsComponent);
   }
 
-  _closeDetails() {
-    remove(this._filmDetailsComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
-  }
-
-  _onCloseBtnClick() {
-    this._closeDetails();
-  }
-
   _onEscKeyDown(evt) {
     if (evt.keyCode === ESC_KEY_CODE) {
       evt.preventDefault();
@@ -78,6 +77,51 @@ class Movie {
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
+  _closeDetails() {
+    remove(this._filmDetailsComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _handleToWatchlistClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._filmCard,
+            {
+              onWatchList: !this._filmCard.onWatchList
+            }
+        )
+    );
+  }
+
+  _handleWatchedClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._filmCard,
+            {
+              isWatched: !this._filmCard.isWatched
+            }
+        )
+    );
+  }
+
+  _handleFavoriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._filmCard,
+            {
+              isFavorite: !this._filmCard.isFavorite
+            }
+        )
+    );
+  }
+
+  _onCloseBtnClick(filmCard) {
+    this._changeData(filmCard);
+    this._closeDetails();
+  }
 }
 
 export default Movie;
