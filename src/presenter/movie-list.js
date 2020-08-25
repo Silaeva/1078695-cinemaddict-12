@@ -3,19 +3,19 @@ import FilmsListView from "../view/films-list.js";
 import SortView from "../view/sort.js";
 import FilmsListTopRatedView from "../view/films-list-top-rated.js";
 import FilmsListMostCommentedView from "../view/films-list-most-commented.js";
-import FilmCardView from "../view/film-card.js";
 import ShowMoreButtonView from "../view/show-more-button.js";
-import DetailsFilmView from "../view/details-film.js";
 import NoFilmsView from "../view/no-films.js";
-import {render, append, remove} from "../utils/render.js";
-import {CountCards, ESC_KEY_CODE, SortType} from "../const.js";
+import MoviePresenter from "./movie.js";
+import {CountCards, SortType} from "../const.js";
 import {sortFilmByDate, sortFilmByRating} from "../utils/film.js";
+import {render, remove} from "../utils/render.js";
 
 class MovieList {
   constructor(filmsContainer) {
     this._filmsContainer = filmsContainer;
     this._renderedFilmCards = CountCards.PER_STEP;
     this._currentSortType = SortType.DEFAULT;
+    this._moviePresenter = {};
 
     this._filmsSectionComponent = new FilmsSectionView();
     this._filmsListComponent = new FilmsListView();
@@ -69,39 +69,9 @@ class MovieList {
   }
 
   _renderFilm(listComponent, filmCard) {
-    const filmCardComponent = new FilmCardView(filmCard);
-    const filmDetailsComponent = new DetailsFilmView(filmCard);
-
-    const showDetails = () => {
-      append(this._filmsContainer, filmDetailsComponent);
-    };
-
-    const closeDetails = () => {
-      remove(filmDetailsComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.keyCode === ESC_KEY_CODE) {
-        evt.preventDefault();
-        closeDetails();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onFilmCardClick = () => {
-      showDetails();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    };
-
-    filmCardComponent.setFilmClickHandler(onFilmCardClick);
-
-    filmDetailsComponent.setCloseBtnHandler(() => {
-      closeDetails();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    const filmsListContainer = listComponent.getElement().querySelector(`.films-list__container`);
-    render(filmsListContainer, filmCardComponent);
+    const moviePresenter = new MoviePresenter(listComponent);
+    moviePresenter.init(this._filmsContainer, filmCard);
+    this._moviePresenter[filmCard.id] = moviePresenter;
   }
 
   _renderFilms(from, to) {
@@ -129,7 +99,10 @@ class MovieList {
   }
 
   _clearFilmCardsList() {
-    this._filmsListComponent.getElement().querySelector(`.films-list__container`).innerHTML = ``;
+    Object
+    .values(this._moviePresenter)
+    .forEach((presenter) => presenter.destroy());
+    this._moviePresenter = {};
     this._renderedFilmCards = CountCards.PER_STEP;
   }
 

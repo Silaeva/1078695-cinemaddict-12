@@ -6,6 +6,8 @@ const generateFilmCards = (number) => {
   return new Array(number).fill().map(generateFilmCard);
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateFilmCard = () => {
   return {
     title: getRandomItem(TITLES),
@@ -25,7 +27,8 @@ const generateFilmCard = () => {
     country: getRandomItem(COUNTRIES),
     onWatchList: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    id: generateId()
   };
 };
 
