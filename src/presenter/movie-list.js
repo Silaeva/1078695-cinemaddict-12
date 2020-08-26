@@ -27,6 +27,7 @@ class MovieList {
     this._showMoreButtonComponent = new ShowMoreButtonView();
 
     this._handleFilmCardChange = this._handleFilmCardChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -40,10 +41,17 @@ class MovieList {
     this._renderExtra(filmCards);
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._moviePresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+
   _handleFilmCardChange(updatedCard) {
     this._filmCards = updateItem(this._filmCards, updatedCard);
     this._sourcedFilmCards = updateItem(this._sourcedFilmCards, updatedCard);
-    this._moviePresenter[updatedCard.id].init(updatedCard);
+    this._moviePresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
   }
 
   _sortFilms(sortType) {
@@ -77,7 +85,7 @@ class MovieList {
   }
 
   _renderFilm(listComponent, filmCard) {
-    const moviePresenter = new MoviePresenter(listComponent, this._handleFilmCardChange);
+    const moviePresenter = new MoviePresenter(listComponent, this._handleFilmCardChange, this._handleModeChange);
     moviePresenter.init(this._filmsContainer, filmCard);
     this._moviePresenter[filmCard.id] = moviePresenter;
   }

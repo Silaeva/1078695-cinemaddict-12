@@ -3,13 +3,20 @@ import DetailsFilmView from "../view/details-film.js";
 import {render, append, remove, replace} from "../utils/render.js";
 import {ESC_KEY_CODE} from "../const.js";
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  DETAILS: `DETAILS`
+};
+
 class Movie {
-  constructor(filmContainer, changeData) {
+  constructor(filmContainer, changeData, changeMode) {
     this._filmListContainer = filmContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._onFilmCardClick = this._onFilmCardClick.bind(this);
     this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
@@ -43,11 +50,11 @@ class Movie {
       return;
     }
 
-    if (this._filmListContainer.getElement().contains(prevFilmCardComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._filmCardComponent, prevFilmCardComponent);
     }
 
-    if (this._filmListContainer.getElement().contains(prevFilmDetailsComponent.getElement())) {
+    if (this._mode === Mode.DETAILS) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
     }
 
@@ -61,8 +68,17 @@ class Movie {
     remove(this._filmDetailsComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closeDetails();
+    }
+  }
+
   _showDetails() {
     append(this._mainContainer, this._filmDetailsComponent);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.DETAILS;
   }
 
   _onEscKeyDown(evt) {
@@ -74,12 +90,12 @@ class Movie {
 
   _onFilmCardClick() {
     this._showDetails();
-    document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _closeDetails() {
     remove(this._filmDetailsComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
   _handleToWatchlistClick() {
