@@ -50,9 +50,7 @@ class Movie {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
-      replace(this._filmCardComponent, prevFilmCardComponent);
-    }
+    replace(this._filmCardComponent, prevFilmCardComponent);
 
     if (this._mode === Mode.DETAILS) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
@@ -135,8 +133,8 @@ class Movie {
   }
 
   _onCloseBtnClick(filmCard) {
-    this._changeData(filmCard);
     this._closeDetails();
+    this._changeData(filmCard);
   }
 }
 
