@@ -9,8 +9,6 @@ const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
-const ESC_KEY_CODE = 27;
-
 const TITLES = [
   `The Dance of Life`,
   `Sagebrush Trail`,
@@ -79,4 +77,4 @@ const SortType = {
   BY_RATING: `by-rating`
 };
 
-export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, ESC_KEY_CODE, CountCards, RenderPosition, SortType};
+export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, CountCards, RenderPosition, SortType};

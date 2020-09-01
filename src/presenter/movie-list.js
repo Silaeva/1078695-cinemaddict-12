@@ -17,6 +17,7 @@ class MovieList {
     this._renderedFilmCards = CountCards.PER_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._moviePresenter = {};
+    this._movieExtraPresenter = {};
 
     this._filmsSectionComponent = new FilmsSectionView();
     this._filmsListComponent = new FilmsListView();
@@ -27,7 +28,7 @@ class MovieList {
     this._showMoreButtonComponent = new ShowMoreButtonView();
 
     this._handleFilmCardChange = this._handleFilmCardChange.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleResetPopups = this._handleResetPopups.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -41,9 +42,12 @@ class MovieList {
     this._renderExtra(filmCards);
   }
 
-  _handleModeChange() {
+  _handleResetPopups() {
     Object
       .values(this._moviePresenter)
+      .forEach((presenter) => presenter.resetView());
+    Object
+      .values(this._movieExtraPresenter)
       .forEach((presenter) => presenter.resetView());
   }
 
@@ -52,6 +56,7 @@ class MovieList {
     this._filmCards = updateItem(this._filmCards, updatedCard);
     this._sourcedFilmCards = updateItem(this._sourcedFilmCards, updatedCard);
     this._moviePresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
+    this._movieExtraPresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
   }
 
   _sortFilms(sortType) {
@@ -84,16 +89,16 @@ class MovieList {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _renderFilm(listComponent, filmCard) {
-    const moviePresenter = new MoviePresenter(listComponent, this._handleFilmCardChange, this._handleModeChange);
+  _renderFilm(listComponent, filmCard, presenter) {
+    const moviePresenter = new MoviePresenter(listComponent, this._handleFilmCardChange, this._handleResetPopups);
     moviePresenter.init(this._filmsContainer, filmCard);
-    this._moviePresenter[filmCard.id] = moviePresenter;
+    presenter[filmCard.id] = moviePresenter;
   }
 
   _renderFilms(from, to) {
     this._filmCards
       .slice(from, to)
-      .forEach((filmCard) => this._renderFilm(this._filmsListComponent, filmCard));
+      .forEach((filmCard) => this._renderFilm(this._filmsListComponent, filmCard, this._moviePresenter));
   }
 
   _renderNoFilms() {
@@ -149,8 +154,8 @@ class MovieList {
     const topRatedFilmCards = filmCards.slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
     const mostCommentedFilmCards = filmCards.slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
 
-    topRatedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListTopRatedComponent, filmCard));
-    mostCommentedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListMostCommentedComponent, filmCard));
+    topRatedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListTopRatedComponent, filmCard, this._movieExtraPresenter));
+    mostCommentedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListMostCommentedComponent, filmCard, this._movieExtraPresenter));
   }
 }
 

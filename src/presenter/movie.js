@@ -1,7 +1,6 @@
 import FilmCardView from "../view/film-card.js";
 import DetailsFilmView from "../view/details-film.js";
 import {render, append, remove, replace} from "../utils/render.js";
-import {ESC_KEY_CODE} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -9,10 +8,10 @@ const Mode = {
 };
 
 class Movie {
-  constructor(filmContainer, changeData, changeMode) {
+  constructor(filmContainer, changeData, resetAllPopups) {
     this._filmListContainer = filmContainer;
     this._changeData = changeData;
-    this._changeMode = changeMode;
+    this._resetAllPopups = resetAllPopups;
 
     this._filmCardComponent = null;
     this._filmDetailsComponent = null;
@@ -75,14 +74,15 @@ class Movie {
   _showDetails() {
     append(this._mainContainer, this._filmDetailsComponent);
     document.addEventListener(`keydown`, this._onEscKeyDown);
-    this._changeMode();
+    this._resetAllPopups();
     this._mode = Mode.DETAILS;
   }
 
   _onEscKeyDown(evt) {
-    if (evt.keyCode === ESC_KEY_CODE) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closeDetails();
+      this._changeData(this._filmCard);
     }
   }
 
