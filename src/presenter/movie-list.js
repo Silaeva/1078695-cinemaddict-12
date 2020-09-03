@@ -55,8 +55,14 @@ class MovieList {
   _handleFilmCardChange(updatedCard) {
     this._filmCards = updateItem(this._filmCards, updatedCard);
     this._sourcedFilmCards = updateItem(this._sourcedFilmCards, updatedCard);
-    this._moviePresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
-    this._movieExtraPresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
+
+    if (this._moviePresenter.hasOwnProperty(updatedCard.id)) {
+      this._moviePresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
+    }
+
+    if (this._movieExtraPresenter.hasOwnProperty(updatedCard.id)) {
+      this._movieExtraPresenter[updatedCard.id].init(this._filmsContainer, updatedCard);
+    }
   }
 
   _sortFilms(sortType) {

@@ -204,9 +204,11 @@ class DetailsFilm extends SmartView {
   }
 
   _selectEmojiHandler(evt) {
-    const emoji = evt.target.value;
-    const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
-    emojiContainer.innerHTML = `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
+    if (evt.target.tagName === `INPUT`) {
+      const emoji = evt.target.value;
+      const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+      emojiContainer.innerHTML = `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
+    }
   }
 
   _closeBtnHandler(evt) {

@@ -68,6 +68,7 @@ class Movie {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._closeDetails();
+      this._changeData(this._filmCard);
     }
   }
 
