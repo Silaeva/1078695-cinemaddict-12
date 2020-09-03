@@ -1,7 +1,7 @@
 import {getMovieDuration} from "../utils/film.js";
 import {createElement, render} from "../utils/render.js";
 import CommentView from "../view/comment.js";
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 
 const createFilmDetailsTemplate = (filmCard) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
@@ -132,11 +132,19 @@ const createFilmDetailsTemplate = (filmCard) => {
   );
 };
 
-class DetailsFilm extends AbstractView {
+class DetailsFilm extends SmartView {
   constructor(filmCard) {
     super();
     this._filmCard = filmCard;
+
     this._closeBtnHandler = this._closeBtnHandler.bind(this);
+    this._escPressHandler = this._escPressHandler.bind(this);
+    this._onWatchListToggleHandler = this._onWatchListToggleHandler.bind(this);
+    this._isWatchedToggleHandler = this._isWatchedToggleHandler.bind(this);
+    this._isFavoriteToggleHandler = this._isFavoriteToggleHandler.bind(this);
+    this._selectEmojiHandler = this._selectEmojiHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -159,15 +167,73 @@ class DetailsFilm extends AbstractView {
     });
   }
 
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setCloseBtnHandler(this._callback.closeClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, this._onWatchListToggleHandler);
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, this._isWatchedToggleHandler);
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, this._isFavoriteToggleHandler);
+    this.getElement().querySelector(`.film-details__emoji-list`)
+      .addEventListener(`click`, this._selectEmojiHandler);
+  }
+
+  _onWatchListToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      onWatchList: !this._filmCard.onWatchList
+    });
+  }
+
+  _isWatchedToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      isWatched: !this._filmCard.isWatched
+    });
+  }
+
+  _isFavoriteToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      isFavorite: !this._filmCard.isFavorite
+    });
+  }
+
+  _selectEmojiHandler(evt) {
+    if (evt.target.tagName === `INPUT`) {
+      const emoji = evt.target.value;
+      const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+      emojiContainer.innerHTML = `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
+    }
+  }
+
   _closeBtnHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.closeClick(this._filmCard);
   }
 
   setCloseBtnHandler(callback) {
-    this._callback.click = callback;
+    this._callback.closeClick = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnHandler);
   }
+
+  _escPressHandler(evt) {
+    evt.preventDefault();
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      this._callback.escPress(this._filmCard);
+    }
+  }
+
+  setEscPressHandler(callback) {
+    this._callback.escPress = callback;
+    document.addEventListener(`keydown`, this._escPressHandler);
+  }
+
 }
 
 export default DetailsFilm;
