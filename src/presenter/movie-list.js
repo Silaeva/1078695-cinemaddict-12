@@ -7,7 +7,7 @@ import ShowMoreButtonView from "../view/show-more-button.js";
 import NoFilmsView from "../view/no-films.js";
 import MoviePresenter from "./movie.js";
 import {CountCards, SortType} from "../const.js";
-import {sortFilmByDate, sortFilmByRating} from "../utils/film.js";
+import {sortFilmByReleaseDate, sortFilmByRating} from "../utils/film.js";
 import {render, remove} from "../utils/render.js";
 import {updateItem} from "../utils/common.js";
 
@@ -68,7 +68,7 @@ class MovieList {
   _sortFilms(sortType) {
     switch (sortType) {
       case SortType.BY_DATE:
-        this._filmCards.sort(sortFilmByDate);
+        this._filmCards.sort(sortFilmByReleaseDate);
         break;
       case SortType.BY_RATING:
         this._filmCards.sort(sortFilmByRating);

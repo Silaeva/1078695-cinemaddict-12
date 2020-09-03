@@ -1,3 +1,5 @@
+import moment from "moment";
+
 import {MAX_DESCRIPTION_LENGTH} from "../const.js";
 
 const cropDescription = (text) => {
@@ -8,19 +10,30 @@ const cropDescription = (text) => {
   }
 };
 
-const getMovieDuration = (ms) => {
-  const hours = Math.floor(ms / 3600000);
-  const minutes = Math.floor((ms % 3600000) / 60000);
-  return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
-};
-
-const sortFilmByDate = (filmA, filmB) => {
-  return filmB.year - filmA.year;
+const sortFilmByReleaseDate = (filmA, filmB) => {
+  return filmB.releaseDate - filmA.releaseDate;
 };
 
 const sortFilmByRating = (filmA, filmB) => {
   return filmB.rating - filmA.rating;
 };
 
+const getFormatReleaseDate = (date) => {
+  return moment(date).format(`DD MMMM YYYY`);
+};
 
-export {cropDescription, getMovieDuration, sortFilmByDate, sortFilmByRating};
+const getFormatReleaseYear = (date) => {
+  return moment(date).format(`YYYY`);
+};
+
+const getFormatDuration = (duration) => {
+  const time = moment.utc().startOf(`day`).add({minutes: duration});
+
+  return duration > 60 ? time.format(`H[h] mm[m]`) : time.format(`mm[m]`);
+};
+
+const getFormatCommentDate = (date) => {
+  return moment(date).format(`YYYY/MM/DD hh:mm`);
+};
+
+export {cropDescription, sortFilmByReleaseDate, sortFilmByRating, getFormatReleaseDate, getFormatReleaseYear, getFormatCommentDate, getFormatDuration};

@@ -1,4 +1,4 @@
-import {getMovieDuration} from "../utils/film.js";
+import {getFormatDuration, getFormatReleaseDate} from "../utils/film.js";
 import {createElement, render} from "../utils/render.js";
 import CommentView from "../view/comment.js";
 import SmartView from "./smart.js";
@@ -55,11 +55,11 @@ const createFilmDetailsTemplate = (filmCard) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${releaseDate}</td>
+              <td class="film-details__cell">${getFormatReleaseDate(releaseDate)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${getMovieDuration(duration)}</td>
+              <td class="film-details__cell">${getFormatDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate, humanizeDate} from "../utils/common.js";
+import {getRandomInteger, getRandomArray, getRandomItem, getRandomDate} from "../utils/common.js";
 import {TITLES, GENRES, POSTERS, DESCRIPTIONS, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const.js";
 import {generateComments} from "../mock/comment.js";
 
@@ -13,8 +13,7 @@ const generateFilmCard = () => {
     title: getRandomItem(TITLES),
     titleOriginal: getRandomItem(TITLES),
     rating: `${getRandomInteger(1, 9)}.${getRandomInteger(1, 9)}`,
-    year: getRandomInteger(1900, 2020),
-    duration: getRandomInteger(1200000, 10800000),
+    duration: getRandomInteger(20, 180),
     genres: getRandomArray(GENRES, 1, 3),
     poster: getRandomItem(POSTERS),
     description: getRandomArray(DESCRIPTIONS, 1, 5).join(` `),
@@ -23,7 +22,7 @@ const generateFilmCard = () => {
     director: getRandomItem(DIRECTORS),
     writers: getRandomArray(WRITERS, 1, 5).join(`, `),
     actors: getRandomArray(ACTORS, 1, 5).join(`, `),
-    releaseDate: humanizeDate(getRandomDate(new Date(getRandomInteger(1900, 2020), 0, 1), new Date())),
+    releaseDate: getRandomDate(new Date(getRandomInteger(1900, 2020), 0, 1), new Date()),
     country: getRandomItem(COUNTRIES),
     onWatchList: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
