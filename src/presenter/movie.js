@@ -74,17 +74,15 @@ class Movie {
 
   _showDetails() {
     append(this._mainContainer, this._filmDetailsComponent);
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._filmDetailsComponent.setEscPressHandler(this._onEscKeyDown);
+
     this._resetAllPopups();
     this._mode = Mode.DETAILS;
   }
 
-  _onEscKeyDown(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
-      this._closeDetails();
-      this._changeData(this._filmCard);
-    }
+  _onEscKeyDown(filmCard) {
+    this._closeDetails();
+    this._changeData(filmCard);
   }
 
   _onFilmCardClick() {

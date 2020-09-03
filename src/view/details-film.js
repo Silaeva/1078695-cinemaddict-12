@@ -220,6 +220,19 @@ class DetailsFilm extends SmartView {
     this._callback.closeClick = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeBtnHandler);
   }
+
+  _escPressHandler(evt) {
+    evt.preventDefault();
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      this._callback.escPress(this._filmCard);
+    }
+  }
+
+  setEscPressHandler(callback) {
+    this._callback.escPress = callback;
+    document.addEventListener(`keydown`, this._escPressHandler);
+  }
+
 }
 
 export default DetailsFilm;
