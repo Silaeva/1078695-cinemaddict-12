@@ -138,6 +138,7 @@ class DetailsFilm extends SmartView {
     this._filmCard = filmCard;
 
     this._closeBtnHandler = this._closeBtnHandler.bind(this);
+    this._escPressHandler = this._escPressHandler.bind(this);
     this._onWatchListToggleHandler = this._onWatchListToggleHandler.bind(this);
     this._isWatchedToggleHandler = this._isWatchedToggleHandler.bind(this);
     this._isFavoriteToggleHandler = this._isFavoriteToggleHandler.bind(this);
