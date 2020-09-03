@@ -22,9 +22,6 @@ const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-const humanizeDate = (date) => {
-  return date.toLocaleString(`en-US`, {day: `numeric`, month: `long`, year: `numeric`});
-};
 
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
@@ -40,4 +37,4 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {getRandomArray, getRandomDate, humanizeDate, getRandomItem, getRandomInteger, updateItem};
+export {getRandomArray, getRandomDate, getRandomItem, getRandomInteger, updateItem};
