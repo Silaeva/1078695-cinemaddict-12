@@ -31,4 +31,4 @@ const generateFilmCard = () => {
   };
 };
 
-export {generateFilmCards, generateFilmCard};
+export {generateFilmCards, generateFilmCard, generateId};

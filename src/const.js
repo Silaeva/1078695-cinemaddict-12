@@ -77,4 +77,27 @@ const SortType = {
   BY_RATING: `by-rating`
 };
 
-export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, CountCards, RenderPosition, SortType};
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
+const UpdateType = {
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+const UserAction = {
+  UPDATE_FILM: `UPDATE_FILM`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  DELETE_COMMENT: `DELETE_COMMENT`
+};
+
+const keyCode = {
+  ENTER: 13,
+  CTRL: 17
+};
+
+export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, CountCards, RenderPosition, SortType, FilterType, UpdateType, UserAction, keyCode};

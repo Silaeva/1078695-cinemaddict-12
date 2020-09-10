@@ -1,6 +1,8 @@
 import FilmCardView from "../view/film-card.js";
 import DetailsFilmView from "../view/details-film.js";
 import {render, append, remove, replace} from "../utils/render.js";
+import {UserAction, UpdateType} from "../const.js";
+import CommentsModel from "../model/comments.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -17,23 +19,32 @@ class Movie {
     this._filmDetailsComponent = null;
     this._mode = Mode.DEFAULT;
 
+    this._commentsModel = new CommentsModel();
+
     this._onFilmCardClick = this._onFilmCardClick.bind(this);
     this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onCloseBtnClick = this._onCloseBtnClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._handleAddComment = this._handleAddComment.bind(this);
+    this._handleDeleteComment = this._handleDeleteComment.bind(this);
+    this._handleCommentsEvent = this._handleCommentsEvent.bind(this);
   }
 
   init(mainContainer, filmCard) {
     this._filmCard = filmCard;
     this._mainContainer = mainContainer;
 
+    this._commentsModel.setComments(this._filmCard.comments);
+
+    this._commentsModel.addObserver(this._handleCommentsEvent);
+
     const prevFilmCardComponent = this._filmCardComponent;
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
     this._filmCardComponent = new FilmCardView(filmCard);
-    this._filmDetailsComponent = new DetailsFilmView(filmCard);
+    this._filmDetailsComponent = new DetailsFilmView(filmCard, this._commentsModel.getComments());
 
 
     this._filmCardComponent.setFilmClickHandler(this._onFilmCardClick);
@@ -41,6 +52,8 @@ class Movie {
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setCloseBtnHandler(this._onCloseBtnClick);
+    this._filmDetailsComponent.setAddCommentHandler(this._handleAddComment);
+    this._filmDetailsComponent.setDeleteCommentHandler(this._handleDeleteComment);
 
     const filmsListContainer = this._filmListContainer.getElement().querySelector(`.films-list__container`);
 
@@ -82,7 +95,10 @@ class Movie {
 
   _onEscKeyDown(filmCard) {
     this._closeDetails();
-    this._changeData(filmCard);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        filmCard);
   }
 
   _onFilmCardClick() {
@@ -97,6 +113,8 @@ class Movie {
 
   _handleToWatchlistClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,
@@ -109,6 +127,8 @@ class Movie {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,
@@ -121,6 +141,8 @@ class Movie {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,
@@ -133,7 +155,30 @@ class Movie {
 
   _onCloseBtnClick(filmCard) {
     this._closeDetails();
-    this._changeData(filmCard);
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        filmCard);
+  }
+
+  _handleCommentsEvent() {
+    this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._filmCard,
+            {comments: this._commentsModel.getComments()}
+        )
+    );
+  }
+
+  _handleAddComment(comment) {
+    this._commentsModel.addComment(UpdateType.MINOR, comment);
+  }
+
+  _handleDeleteComment(comment) {
+    this._commentsModel.deleteComment(UpdateType.MINOR, comment);
   }
 }
 
