@@ -3,12 +3,11 @@ import AbstractView from "./abstract.js";
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;
 
-  const filterTitle = name === `all` ? `all movies` : name;
-  const filterCount = name === `all` ? `` : ` <span class="main-navigation__item-count">${count}</span>`;
+  const filterCount = name === `All movies` ? `` : ` <span class="main-navigation__item-count">${count}</span>`;
   const filterActiveClassName = type === currentFilterType ? `main-navigation__item--active` : ``;
 
   return (
-    `<a href="#${name}" class="main-navigation__item ${filterActiveClassName}" data-type="${type}">${filterTitle}${filterCount}</a>`
+    `<a href="#${name}" class="main-navigation__item ${filterActiveClassName}" data-type="${type}">${name}${filterCount}</a>`
   );
 };
 

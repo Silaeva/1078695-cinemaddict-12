@@ -52,8 +52,8 @@ class Movie {
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setCloseBtnHandler(this._onCloseBtnClick);
-    this._filmDetailsComponent.setAddCommentHandler(this._handleAddComment);
-    this._filmDetailsComponent.setDeleteCommentHandler(this._handleDeleteComment);
+    // this._filmDetailsComponent.setAddCommentHandler(this._handleAddComment);
+    // this._filmDetailsComponent.setDeleteCommentHandler(this._handleDeleteComment);
 
     const filmsListContainer = this._filmListContainer.getElement().querySelector(`.films-list__container`);
 
@@ -88,6 +88,9 @@ class Movie {
   _showDetails() {
     append(this._mainContainer, this._filmDetailsComponent);
     this._filmDetailsComponent.setEscPressHandler(this._onEscKeyDown);
+
+    this._filmDetailsComponent.setAddCommentHandler(this._handleAddComment);
+    this._filmDetailsComponent.setDeleteCommentHandler(this._handleDeleteComment);
 
     this._resetAllPopups();
     this._mode = Mode.DETAILS;

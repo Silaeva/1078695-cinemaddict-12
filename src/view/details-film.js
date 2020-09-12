@@ -230,7 +230,6 @@ class DetailsFilm extends SmartView {
   }
 
   _escPressHandler(evt) {
-    evt.preventDefault();
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._callback.escPress(this._filmCard);
     }
@@ -242,7 +241,7 @@ class DetailsFilm extends SmartView {
   }
 
   _addCommentHandler(evt) {
-    if (evt.keyCode === keyCode.ENTER && evt.keyCode === keyCode.CTRL) {
+    if (evt.keyCode === keyCode.ENTER && (evt.ctrlKey || evt.metaKey)) {
       const message = this.getElement().querySelector(`.film-details__comment-input`).value.trim();
       const emoji = this.getElement().querySelector(`.film-details__add-emoji-img`).dataset.emoji;
 
@@ -257,14 +256,12 @@ class DetailsFilm extends SmartView {
 
         this._callback.addComment(newComment);
       }
-      // this.getElement().querySelector(`.film-details__comment-input`).value = null;
-      // this.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = ``;
     }
   }
 
   setAddCommentHandler(callback) {
     this._callback.addComment = callback;
-    document.addEventListener(`keydown`, this._addCommentHandler);
+    this.getElement().addEventListener(`keydown`, this._addCommentHandler);
   }
 
   _deleteClickHandler(evt) {
