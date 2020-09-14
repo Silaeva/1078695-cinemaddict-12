@@ -4,10 +4,10 @@ import {FilterType, UpdateType} from "../const.js";
 import {filter} from "../utils/filter.js";
 
 class Filter {
-  constructor(siteMainElement, filterModel, moviesModel) {
+  constructor(siteMainElement, filterModel, filmsModel) {
     this._siteMainElement = siteMainElement;
     this._filterModel = filterModel;
-    this._moviesModel = moviesModel;
+    this._filmsModel = filmsModel;
     this._currentFilter = null;
 
     this._filterComponent = null;
@@ -15,7 +15,7 @@ class Filter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._moviesModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
@@ -50,7 +50,7 @@ class Filter {
   }
 
   _getFilters() {
-    const films = this._moviesModel.getFilms();
+    const films = this._filmsModel.getFilms();
 
     return [
       {

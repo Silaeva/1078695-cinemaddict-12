@@ -177,15 +177,12 @@ class DetailsFilm extends SmartView {
     this.setCloseBtnHandler(this._callback.closeClick);
     this.setDeleteCommentHandler(this._callback.deleteClick);
     this.setAddCommentHandler(this._callback.addComment);
+    this.setWatchlistCardClickHandler(this._callback.watchlistClick);
+    this.setFavoriteCardClickHandler(this._callback.favoriteClick);
+    this.setWatchedCardClickHandler(this._callback.watchedClick);
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, this._onWatchListToggleHandler);
-    this.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, this._isWatchedToggleHandler);
-    this.getElement().querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, this._isFavoriteToggleHandler);
     this.getElement().querySelector(`.film-details__emoji-list`)
       .addEventListener(`click`, this._selectEmojiHandler);
   }
@@ -194,21 +191,42 @@ class DetailsFilm extends SmartView {
     evt.preventDefault();
     this.updateData({
       onWatchList: !this._filmCard.onWatchList
-    });
+    },
+    false);
+    this._callback.watchlistClick(this._filmCard);
   }
 
   _isWatchedToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
       isWatched: !this._filmCard.isWatched
-    });
+    },
+    false);
+    this._callback.watchedClick(this._filmCard);
   }
 
   _isFavoriteToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
       isFavorite: !this._filmCard.isFavorite
-    });
+    },
+    false);
+    this._callback.favoriteClick(this._filmCard);
+  }
+
+  setFavoriteCardClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._isFavoriteToggleHandler);
+  }
+
+  setWatchedCardClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._isWatchedToggleHandler);
+  }
+
+  setWatchlistCardClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._onWatchListToggleHandler);
   }
 
   _selectEmojiHandler(evt) {
