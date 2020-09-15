@@ -78,7 +78,7 @@ class DetailsFilm {
     this._changeData(
         UpdateType.MINOR,
         filmCard);
-    this._resetAllPopups();
+    this.destroy();
   }
 
   _onCloseBtnClick(filmCard) {

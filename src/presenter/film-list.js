@@ -47,7 +47,7 @@ class FilmList {
 
   _getFilmCards() {
     const filterType = this._filterModel.getFilter();
-    const films = this._filmsModel.getFilms();
+    const films = this._filmsModel.getFilms().slice();
     const filtredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
