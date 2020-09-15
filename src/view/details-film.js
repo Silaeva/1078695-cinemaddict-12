@@ -1,5 +1,7 @@
-import {getFormatDuration, getFormatReleaseDate} from "../utils/film.js";
+import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate} from "../utils/film.js";
 import {createElement, render} from "../utils/render.js";
+import {generateId} from "../mock/film-card.js";
+import {keyCode} from "../const.js";
 import CommentView from "../view/comment.js";
 import SmartView from "./smart.js";
 
@@ -133,15 +135,19 @@ const createFilmDetailsTemplate = (filmCard) => {
 };
 
 class DetailsFilm extends SmartView {
-  constructor(filmCard) {
+  constructor(filmCard, comments) {
     super();
     this._filmCard = filmCard;
+    this._comments = comments;
 
     this._closeBtnHandler = this._closeBtnHandler.bind(this);
     this._escPressHandler = this._escPressHandler.bind(this);
     this._onWatchListToggleHandler = this._onWatchListToggleHandler.bind(this);
     this._isWatchedToggleHandler = this._isWatchedToggleHandler.bind(this);
     this._isFavoriteToggleHandler = this._isFavoriteToggleHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
+
     this._selectEmojiHandler = this._selectEmojiHandler.bind(this);
 
     this._setInnerHandlers();
@@ -154,13 +160,12 @@ class DetailsFilm extends SmartView {
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate().trim());
-      this._renderComments();
+      this._renderComments(this._comments);
     }
     return this._element;
   }
 
-  _renderComments() {
-    const {comments} = this._filmCard;
+  _renderComments(comments) {
     const commentsContainer = this.getElement().querySelector(`.film-details__comments-list`);
     comments.map((comment) => {
       return render(commentsContainer, new CommentView(comment));
@@ -170,15 +175,14 @@ class DetailsFilm extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setCloseBtnHandler(this._callback.closeClick);
+    this.setDeleteCommentHandler(this._callback.deleteClick);
+    this.setAddCommentHandler(this._callback.addComment);
+    this.setWatchlistCardClickHandler(this._callback.watchlistClick);
+    this.setFavoriteCardClickHandler(this._callback.favoriteClick);
+    this.setWatchedCardClickHandler(this._callback.watchedClick);
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, this._onWatchListToggleHandler);
-    this.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, this._isWatchedToggleHandler);
-    this.getElement().querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, this._isFavoriteToggleHandler);
     this.getElement().querySelector(`.film-details__emoji-list`)
       .addEventListener(`click`, this._selectEmojiHandler);
   }
@@ -187,28 +191,49 @@ class DetailsFilm extends SmartView {
     evt.preventDefault();
     this.updateData({
       onWatchList: !this._filmCard.onWatchList
-    });
+    },
+    false);
+    this._callback.watchlistClick(this._filmCard);
   }
 
   _isWatchedToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
       isWatched: !this._filmCard.isWatched
-    });
+    },
+    false);
+    this._callback.watchedClick(this._filmCard);
   }
 
   _isFavoriteToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
       isFavorite: !this._filmCard.isFavorite
-    });
+    },
+    false);
+    this._callback.favoriteClick(this._filmCard);
+  }
+
+  setFavoriteCardClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._isFavoriteToggleHandler);
+  }
+
+  setWatchedCardClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._isWatchedToggleHandler);
+  }
+
+  setWatchlistCardClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._onWatchListToggleHandler);
   }
 
   _selectEmojiHandler(evt) {
     if (evt.target.tagName === `INPUT`) {
       const emoji = evt.target.value;
       const emojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
-      emojiContainer.innerHTML = `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
+      emojiContainer.innerHTML = `<img class="film-details__add-emoji-img" src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji" data-emoji="${emoji}">`;
     }
   }
 
@@ -223,7 +248,6 @@ class DetailsFilm extends SmartView {
   }
 
   _escPressHandler(evt) {
-    evt.preventDefault();
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._callback.escPress(this._filmCard);
     }
@@ -232,6 +256,44 @@ class DetailsFilm extends SmartView {
   setEscPressHandler(callback) {
     this._callback.escPress = callback;
     document.addEventListener(`keydown`, this._escPressHandler);
+  }
+
+  _addCommentHandler(evt) {
+    if (evt.keyCode === keyCode.ENTER && (evt.ctrlKey || evt.metaKey)) {
+      const message = this.getElement().querySelector(`.film-details__comment-input`).value.trim();
+      const emoji = this.getElement().querySelector(`.film-details__add-emoji-img`).dataset.emoji;
+
+      if (message && emoji) {
+        const newComment = {
+          id: generateId(),
+          author: `User`,
+          emotion: emoji,
+          text: message,
+          date: getFormatCommentDate(new Date())
+        };
+
+        this._callback.addComment(newComment);
+      }
+    }
+  }
+
+  setAddCommentHandler(callback) {
+    this._callback.addComment = callback;
+    this.getElement().addEventListener(`keydown`, this._addCommentHandler);
+  }
+
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    const currentCommentId = evt.target.closest(`.film-details__comment`).dataset.id;
+    const currentComment = this._comments.filter((comment) => comment.id === +currentCommentId);
+    this._callback.deleteClick(currentComment);
+  }
+
+  setDeleteCommentHandler(callback) {
+    this._callback.deleteClick = callback;
+    const deleteButtons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+
+    deleteButtons.forEach((button) => button.addEventListener(`click`, this._deleteClickHandler));
   }
 
 }

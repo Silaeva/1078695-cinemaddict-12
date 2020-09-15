@@ -1,29 +1,32 @@
 import UserProfileView from "./view/user-profile.js";
-import FilterView from "./view/filter.js";
 import StatisticsView from "./view/statistics.js";
 import {generateFilmCards} from "./mock/film-card.js";
-import {generateFilter} from "./mock/filter.js";
 import {CountCards} from "./const.js";
 import {render} from "./utils/render.js";
-import MovieListPresenter from "./presenter/movie-list.js";
+import FilmListPresenter from "./presenter/film-list.js";
+import FilterPresenter from "./presenter/filter.js";
+import FilmsModel from "./model/films.js";
+import FilterModel from "./model/filter.js";
 
 const filmCards = generateFilmCards(CountCards.ALL);
-const filters = generateFilter(filmCards);
+
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(filmCards);
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const filterHistoryCount = filters.reduce((newFilter, curfilter) => {
-  newFilter[curfilter.name] = curfilter.count;
-  return newFilter;
-}, {}).history;
+const countWatched = filmCards.filter((card) => card.isWatched === true).length;
+render(siteHeaderElement, new UserProfileView(countWatched));
 
-render(siteHeaderElement, new UserProfileView(filterHistoryCount));
+const filterModel = new FilterModel();
 
-render(siteMainElement, new FilterView(filters));
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 
-const movieListPresenter = new MovieListPresenter(siteMainElement);
-movieListPresenter.init(filmCards);
+const filmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel);
 
-render(footerStatisticsElement, new StatisticsView(filmCards.length));
+filterPresenter.init();
+filmListPresenter.init();
+
+render(footerStatisticsElement, new StatisticsView(filmsModel.getFilms().length));
