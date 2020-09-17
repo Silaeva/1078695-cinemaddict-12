@@ -1,5 +1,5 @@
 const CountCards = {
-  ALL: 23,
+  ALL: 200,
   PER_STEP: 5,
   EXTRA: 2
 };
@@ -77,17 +77,27 @@ const SortType = {
   BY_RATING: `by-rating`
 };
 
-const FilterType = {
+const NavType = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
-  FAVORITES: `favorites`
+  FAVORITES: `favorites`,
+  STATISTICS: `stats`
+};
+
+const FilterType = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
 };
 
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  STATS: `STATS`
 };
 
 const UserAction = {
@@ -101,4 +111,4 @@ const keyCode = {
   CTRL: 17
 };
 
-export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, CountCards, RenderPosition, SortType, FilterType, UpdateType, UserAction, keyCode};
+export {TITLES, GENRES, POSTERS, DESCRIPTIONS, EMOTIONS, COMMENTS_TEXTS, AUTHORS, DIRECTORS, WRITERS, ACTORS, COUNTRIES, MAX_DESCRIPTION_LENGTH, CountCards, RenderPosition, SortType, NavType, UpdateType, UserAction, keyCode, FilterType};

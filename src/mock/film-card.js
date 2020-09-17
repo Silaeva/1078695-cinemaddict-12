@@ -27,6 +27,7 @@ const generateFilmCard = () => {
     onWatchList: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
+    watchedDate: getRandomDate(new Date(getRandomInteger(2019, 2020), 0, 1), new Date()),
     id: generateId()
   };
 };
