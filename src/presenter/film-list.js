@@ -6,16 +6,17 @@ import FilmsListMostCommentedView from "../view/films-list-most-commented.js";
 import ShowMoreButtonView from "../view/show-more-button.js";
 import NoFilmsView from "../view/no-films.js";
 import FilmPresenter from "./film.js";
+import StatisticsPresenter from "./statistics.js";
 import {CountCards, SortType, UpdateType} from "../const.js";
 import {sortFilmByReleaseDate, sortFilmByRating} from "../utils/film.js";
 import {render, remove} from "../utils/render.js";
-import {filter} from "../utils/filter.js";
+import {nav} from "../utils/nav.js";
 
 class FilmList {
-  constructor(filmsContainer, filmsModel, filterModel) {
+  constructor(filmsContainer, filmsModel, navModel) {
     this._filmsContainer = filmsContainer;
     this._filmsModel = filmsModel;
-    this._filterModel = filterModel;
+    this._navModel = navModel;
     this._renderedFilmCards = CountCards.PER_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
@@ -38,17 +39,17 @@ class FilmList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._navModel.addObserver(this._handleModelEvent);
   }
 
   init() {
     this._renderFilmList();
   }
 
-  _getFilmCards() {
-    const filterType = this._filterModel.getFilter();
+  _getFilms() {
+    const navType = this._navModel.getNav();
     const films = this._filmsModel.getFilms().slice();
-    const filtredFilms = filter[filterType](films);
+    const filtredFilms = nav[navType](films);
 
     switch (this._currentSortType) {
       case SortType.BY_DATE:
@@ -94,9 +95,25 @@ class FilmList {
         this._renderFilmList();
         break;
       case UpdateType.MAJOR:
+        this._clearStatistics();
         this._clearFilmList({resetRenderedCardCount: true, resetSortType: true});
         this._renderFilmList();
         break;
+      case UpdateType.STATS:
+        this._clearFilmList({resetRenderedCardCount: true, resetSortType: true});
+        this._renderStatistics();
+        break;
+    }
+  }
+
+  _renderStatistics() {
+    this._staticticsPresenter = new StatisticsPresenter(this._filmsContainer, this._filmsModel.getFilms());
+    this._staticticsPresenter.init();
+  }
+
+  _clearStatistics() {
+    if (this._staticticsPresenter) {
+      this._staticticsPresenter.destroy();
     }
   }
 
@@ -136,9 +153,9 @@ class FilmList {
   }
 
   _handleShowMoreButtonClick() {
-    const filmsCount = this._getFilmCards().length;
+    const filmsCount = this._getFilms().length;
     const newRenderedfilmsCount = Math.min(filmsCount, this._renderedFilmCards + CountCards.PER_STEP);
-    const films = this._getFilmCards().slice(this._renderedFilmCards, newRenderedfilmsCount);
+    const films = this._getFilms().slice(this._renderedFilmCards, newRenderedfilmsCount);
     this._renderFilms(films);
     this._renderedFilmCards = newRenderedfilmsCount;
 
@@ -159,7 +176,7 @@ class FilmList {
   }
 
   _clearFilmList({resetRenderedCardCount = false, resetSortType = false} = {}) {
-    const cardsCount = this._getFilmCards().length;
+    const cardsCount = this._getFilms().length;
 
     Object
       .values(this._filmPresenter)
@@ -195,7 +212,7 @@ class FilmList {
   }
 
   _renderFilmList() {
-    const filmCards = this._getFilmCards();
+    const filmCards = this._getFilms();
     const filmsCount = filmCards.length;
 
     if (filmsCount === 0) {
@@ -220,8 +237,8 @@ class FilmList {
     render(this._filmsSectionComponent, this._filmsListTopRatedComponent);
     render(this._filmsSectionComponent, this._filmsListMostCommentedComponent);
 
-    const topRatedFilmCards = this._getFilmCards().slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
-    const mostCommentedFilmCards = this._getFilmCards().slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
+    const topRatedFilmCards = this._getFilms().slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
+    const mostCommentedFilmCards = this._getFilms().slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
 
     topRatedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListTopRatedComponent, filmCard, this._filmTopRatedPresenter));
     mostCommentedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListMostCommentedComponent, filmCard, this._filmMostCommentedPresenter));

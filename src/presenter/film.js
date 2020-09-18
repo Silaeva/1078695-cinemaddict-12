@@ -78,7 +78,7 @@ class Film {
 
   _handleToWatchlistClick() {
     this._changeData(
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,
@@ -91,7 +91,7 @@ class Film {
 
   _handleWatchedClick() {
     this._changeData(
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,
@@ -104,7 +104,7 @@ class Film {
 
   _handleFavoriteClick() {
     this._changeData(
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._filmCard,

@@ -22,4 +22,16 @@ const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-export {getRandomArray, getRandomDate, getRandomItem, getRandomInteger};
+const getProfileRating = (watchedFilms) => {
+  let profileRating = ``;
+  if (watchedFilms > 0 && watchedFilms <= 10) {
+    profileRating = `novice`;
+  } else if (watchedFilms >= 11 && watchedFilms <= 20) {
+    profileRating = `fan`;
+  } else if (watchedFilms >= 21) {
+    profileRating = `movie buff`;
+  }
+  return profileRating;
+};
+
+export {getRandomArray, getRandomDate, getRandomItem, getRandomInteger, getProfileRating};

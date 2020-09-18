@@ -1,12 +1,12 @@
-import UserProfileView from "./view/user-profile.js";
-import StatisticsView from "./view/statistics.js";
+import FooterStatisticsView from "./view/footer-statistics.js";
 import {generateFilmCards} from "./mock/film-card.js";
 import {CountCards} from "./const.js";
 import {render} from "./utils/render.js";
 import FilmListPresenter from "./presenter/film-list.js";
-import FilterPresenter from "./presenter/filter.js";
+import NavPresenter from "./presenter/nav.js";
+import UserPresenter from "./presenter/user.js";
 import FilmsModel from "./model/films.js";
-import FilterModel from "./model/filter.js";
+import NavModel from "./model/nav.js";
 
 const filmCards = generateFilmCards(CountCards.ALL);
 
@@ -17,16 +17,16 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-const countWatched = filmCards.filter((card) => card.isWatched === true).length;
-render(siteHeaderElement, new UserProfileView(countWatched));
+const userPresenter = new UserPresenter(siteHeaderElement, filmsModel);
+userPresenter.init();
 
-const filterModel = new FilterModel();
+const navModel = new NavModel();
 
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+const navPresenter = new NavPresenter(siteMainElement, navModel, filmsModel);
 
-const filmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel);
+const filmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, navModel);
 
-filterPresenter.init();
+navPresenter.init();
 filmListPresenter.init();
 
-render(footerStatisticsElement, new StatisticsView(filmsModel.getFilms().length));
+render(footerStatisticsElement, new FooterStatisticsView(filmsModel.getFilms().length));
