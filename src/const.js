@@ -1,5 +1,5 @@
 const CountCards = {
-  ALL: 200,
+  ALL: 17,
   PER_STEP: 5,
   EXTRA: 2
 };

@@ -111,6 +111,7 @@ const renderChart = (statisticCtx, films) => {
 
 const createStatisticsTemplate = (films = {}, currentFilter) => {
   const watched = films.filter((film) => film.isWatched);
+  const topGenre = getTopGenre(watched);
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -130,7 +131,7 @@ const createStatisticsTemplate = (films = {}, currentFilter) => {
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
-          <p class="statistic__item-text">${getTopGenre(watched)}</p>
+          <p class="statistic__item-text">${topGenre ? topGenre : ``}</p>
         </li>
       </ul>
       <div class="statistic__chart-wrap">
