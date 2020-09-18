@@ -250,8 +250,8 @@ class DetailsFilm extends SmartView {
   _escPressHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       this._callback.escPress(this._filmCard);
+      document.removeEventListener(`keydown`, this._escPressHandler);
     }
-    document.removeEventListener(`keydown`, this._escPressHandler);
   }
 
   setEscPressHandler(callback) {
