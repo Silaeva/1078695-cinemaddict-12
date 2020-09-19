@@ -1,11 +1,10 @@
-import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate} from "../utils/film.js";
+import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate, generateId} from "../utils/film.js";
 import {createElement, render} from "../utils/render.js";
-import {generateId} from "../mock/film-card.js";
 import {keyCode} from "../const.js";
 import CommentView from "../view/comment.js";
 import SmartView from "./smart.js";
 
-const createFilmDetailsTemplate = (filmCard) => {
+const createFilmDetailsTemplate = (filmCard, isCommentsFail) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
 
   const genreTitle = genres.length > 1 ? `genres` : `genre`;
@@ -16,6 +15,10 @@ const createFilmDetailsTemplate = (filmCard) => {
 
   const isChecked = (boolean) => boolean ? `checked` : ``;
 
+  const commentsSectionTitle = isCommentsFail ?
+    `All comments stolen by the Decepticons` :
+    `Comments <span class="film-details__comments-count">${comments.length}</span>`;
+
   return (
     `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -25,7 +28,7 @@ const createFilmDetailsTemplate = (filmCard) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
           <p class="film-details__age">${ageRating}+</p>
         </div>
@@ -95,7 +98,7 @@ const createFilmDetailsTemplate = (filmCard) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+        <h3 class="film-details__comments-title">${commentsSectionTitle}</h3>
         <ul class="film-details__comments-list">
         </ul>
         <div class="film-details__new-comment">
@@ -135,10 +138,11 @@ const createFilmDetailsTemplate = (filmCard) => {
 };
 
 class DetailsFilm extends SmartView {
-  constructor(filmCard, comments) {
+  constructor(filmCard, comments, isCommentsFail) {
     super();
     this._filmCard = filmCard;
     this._comments = comments;
+    this._isCommentsFail = isCommentsFail;
 
     this._closeBtnHandler = this._closeBtnHandler.bind(this);
     this._escPressHandler = this._escPressHandler.bind(this);
@@ -154,7 +158,7 @@ class DetailsFilm extends SmartView {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._filmCard);
+    return createFilmDetailsTemplate(this._filmCard, this._isCommentsFail);
   }
 
   getElement() {

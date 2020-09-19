@@ -53,6 +53,32 @@ class Comments extends Observer {
 
     this._notify(updateType);
   }
+
+  static adaptToClient(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+          text: comment.comment,
+        });
+
+    delete adaptedComment.comment;
+
+    return adaptedComment;
+  }
+
+  static adaptToServer(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment, {
+          "comment": comment.text
+        }
+    );
+
+    delete adaptedComment.text;
+
+    return adaptedComment;
+  }
 }
 
 export default Comments;

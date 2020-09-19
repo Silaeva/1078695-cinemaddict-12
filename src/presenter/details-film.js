@@ -20,15 +20,14 @@ class DetailsFilm {
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
   }
 
-  init(film, commentsModel) {
+  init(film, commentsModel, isCommentsFail) {
     this._film = film;
     this._commentsModel = commentsModel;
-
-    this._commentsModel.setComments(film.comments);
+    this._isCommentsFail = isCommentsFail;
 
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmDetailsComponent = new DetailsFilmView(this._film, this._commentsModel.getComments());
+    this._filmDetailsComponent = new DetailsFilmView(this._film, this._commentsModel.getComments(), this._isCommentsFail);
 
 
     this._filmDetailsComponent.setWatchlistCardClickHandler(this._handleToWatchlistClick);

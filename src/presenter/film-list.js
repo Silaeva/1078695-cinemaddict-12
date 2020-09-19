@@ -5,6 +5,7 @@ import FilmsListTopRatedView from "../view/films-list-top-rated.js";
 import FilmsListMostCommentedView from "../view/films-list-most-commented.js";
 import ShowMoreButtonView from "../view/show-more-button.js";
 import NoFilmsView from "../view/no-films.js";
+import LoadingView from "../view/loading.js";
 import FilmPresenter from "./film.js";
 import StatisticsPresenter from "./statistics.js";
 import {CountCards, SortType, UpdateType} from "../const.js";
@@ -13,15 +14,17 @@ import {render, remove} from "../utils/render.js";
 import {nav} from "../utils/nav.js";
 
 class FilmList {
-  constructor(filmsContainer, filmsModel, navModel) {
+  constructor(filmsContainer, filmsModel, navModel, api) {
     this._filmsContainer = filmsContainer;
     this._filmsModel = filmsModel;
     this._navModel = navModel;
+    this._api = api;
     this._renderedFilmCards = CountCards.PER_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
     this._filmTopRatedPresenter = {};
     this._filmMostCommentedPresenter = {};
+    this._isLoading = true;
 
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
@@ -31,6 +34,7 @@ class FilmList {
     this._noFilmsComponent = new NoFilmsView();
     this._filmsListTopRatedComponent = new FilmsListTopRatedView();
     this._filmsListMostCommentedComponent = new FilmsListMostCommentedView();
+    this._loadingComponent = new LoadingView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -74,20 +78,22 @@ class FilmList {
   }
 
   _handleViewAction(updateType, update) {
-    this._filmsModel.updateFilm(updateType, update);
+    this._api.updateFilm(update).then((response) => {
+      this._filmsModel.updateFilm(updateType, response);
+    });
   }
 
-  _handleModelEvent(updateType, film) {
+  _handleModelEvent(updateType, item) {
     switch (updateType) {
       case UpdateType.PATCH:
-        if (this._filmPresenter[film.id]) {
-          this._filmPresenter[film.id].init(this._filmsContainer, film);
+        if (this._filmPresenter[item.id]) {
+          this._filmPresenter[item.id].init(this._filmsContainer, item);
         }
-        if (this._filmTopRatedPresenter[film.id]) {
-          this._filmTopRatedPresenter[film.id].init(this._filmsListTopRatedComponent, film);
+        if (this._filmTopRatedPresenter[item.id]) {
+          this._filmTopRatedPresenter[item.id].init(this._filmsListTopRatedComponent, item);
         }
-        if (this._filmMostCommentedPresenter[film.id]) {
-          this._filmMostCommentedPresenter[film.id].init(this._filmsListMostCommentedComponent, film);
+        if (this._filmMostCommentedPresenter[item.id]) {
+          this._filmMostCommentedPresenter[item.id].init(this._filmsListMostCommentedComponent, item);
         }
         break;
       case UpdateType.MINOR:
@@ -102,6 +108,11 @@ class FilmList {
       case UpdateType.STATS:
         this._clearFilmList({resetRenderedCardCount: true, resetSortType: true});
         this._renderStatistics();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderFilmList();
         break;
     }
   }
@@ -152,6 +163,10 @@ class FilmList {
     render(this._filmsContainer, this._noFilmsComponent);
   }
 
+  _renderLoading() {
+    render(this._filmsContainer, this._loadingComponent);
+  }
+
   _handleShowMoreButtonClick() {
     const filmsCount = this._getFilms().length;
     const newRenderedfilmsCount = Math.min(filmsCount, this._renderedFilmCards + CountCards.PER_STEP);
@@ -186,6 +201,7 @@ class FilmList {
     remove(this._sortComponent);
     remove(this._noFilmsComponent);
     remove(this._showMoreButtonComponent);
+    remove(this._loadingComponent);
 
     Object
       .values(this._filmTopRatedPresenter)
@@ -212,6 +228,11 @@ class FilmList {
   }
 
   _renderFilmList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const filmCards = this._getFilms();
     const filmsCount = filmCards.length;
 
