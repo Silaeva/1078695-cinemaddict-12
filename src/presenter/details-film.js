@@ -93,6 +93,7 @@ class DetailsFilm {
     this._changeData(
         UpdateType.MINOR,
         filmCard);
+    this.destroy();
   }
 
   _onCloseBtnClick(filmCard) {
