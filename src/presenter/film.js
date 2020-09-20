@@ -77,6 +77,7 @@ class Film {
   }
 
   _handleToWatchlistClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(
@@ -90,6 +91,7 @@ class Film {
   }
 
   _handleWatchedClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(
@@ -103,6 +105,7 @@ class Film {
   }
 
   _handleFavoriteClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(

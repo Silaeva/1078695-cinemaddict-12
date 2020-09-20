@@ -11,7 +11,7 @@ const cropDescription = (text) => {
 };
 
 const sortFilmByReleaseDate = (filmA, filmB) => {
-  return filmB.releaseDate - filmA.releaseDate;
+  return new Date(filmB.releaseDate) - new Date(filmA.releaseDate);
 };
 
 const sortFilmByRating = (filmA, filmB) => {
@@ -36,4 +36,6 @@ const getFormatCommentDate = (date) => {
   return moment(date).format(`YYYY/MM/DD hh:mm`);
 };
 
-export {cropDescription, sortFilmByReleaseDate, sortFilmByRating, getFormatReleaseDate, getFormatReleaseYear, getFormatCommentDate, getFormatDuration};
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+export {cropDescription, sortFilmByReleaseDate, sortFilmByRating, getFormatReleaseDate, getFormatReleaseYear, getFormatCommentDate, getFormatDuration, generateId};

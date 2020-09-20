@@ -1,6 +1,7 @@
 import {render, remove, replace} from "../utils/render.js";
 import DetailsFilmView from "../view/details-film.js";
-import {UpdateType} from "../const.js";
+import {UpdateType, AUTHORIZATION, END_POINT} from "../const.js";
+import ApiComments from "../api-comments.js";
 
 class DetailsFilm {
   constructor(mainContainer, changeData, resetAllPopups) {
@@ -24,11 +25,25 @@ class DetailsFilm {
     this._film = film;
     this._commentsModel = commentsModel;
 
-    this._commentsModel.setComments(film.comments);
+    this._apiComments = new ApiComments(END_POINT, AUTHORIZATION, film.id);
 
+    this._apiComments.getComments(film.id)
+    .then((comments) => {
+      this._commentsModel.setComments(comments, true);
+      this._renderPopup();
+    })
+    .catch(() => {
+      this._commentsModel.setComments([], false);
+      this._renderPopup();
+    });
+
+
+  }
+
+  _renderPopup() {
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmDetailsComponent = new DetailsFilmView(this._film, this._commentsModel.getComments());
+    this._filmDetailsComponent = new DetailsFilmView(this._film, this._commentsModel);
 
 
     this._filmDetailsComponent.setWatchlistCardClickHandler(this._handleToWatchlistClick);
