@@ -11,7 +11,7 @@ const cropDescription = (text) => {
 };
 
 const sortFilmByReleaseDate = (filmA, filmB) => {
-  return filmB.releaseDate - filmA.releaseDate;
+  return new Date(filmB.releaseDate) - new Date(filmA.releaseDate);
 };
 
 const sortFilmByRating = (filmA, filmB) => {

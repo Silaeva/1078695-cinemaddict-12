@@ -4,7 +4,7 @@ import {keyCode} from "../const.js";
 import CommentView from "../view/comment.js";
 import SmartView from "./smart.js";
 
-const createFilmDetailsTemplate = (filmCard, isCommentsFail) => {
+const createFilmDetailsTemplate = (filmCard, isCommentsSuccess) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
 
   const genreTitle = genres.length > 1 ? `genres` : `genre`;
@@ -15,9 +15,9 @@ const createFilmDetailsTemplate = (filmCard, isCommentsFail) => {
 
   const isChecked = (boolean) => boolean ? `checked` : ``;
 
-  const commentsSectionTitle = isCommentsFail ?
-    `All comments stolen by the Decepticons` :
-    `Comments <span class="film-details__comments-count">${comments.length}</span>`;
+  const commentsSectionTitle = isCommentsSuccess ?
+    `Comments <span class="film-details__comments-count">${comments.length}</span>` :
+    `All comments stolen by the Decepticons`;
 
   return (
     `<section class="film-details">
@@ -138,11 +138,13 @@ const createFilmDetailsTemplate = (filmCard, isCommentsFail) => {
 };
 
 class DetailsFilm extends SmartView {
-  constructor(filmCard, comments, isCommentsFail) {
+  constructor(filmCard, commentsModel) {
     super();
     this._filmCard = filmCard;
-    this._comments = comments;
-    this._isCommentsFail = isCommentsFail;
+    this._commentsModel = commentsModel;
+
+    this._comments = this._commentsModel.getComments();
+    this._isCommentsSuccess = this._commentsModel.isSuccess;
 
     this._closeBtnHandler = this._closeBtnHandler.bind(this);
     this._escPressHandler = this._escPressHandler.bind(this);
@@ -158,7 +160,7 @@ class DetailsFilm extends SmartView {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._filmCard, this._isCommentsFail);
+    return createFilmDetailsTemplate(this._filmCard, this._isCommentsSuccess);
   }
 
   getElement() {

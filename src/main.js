@@ -17,17 +17,19 @@ const api = new Api(END_POINT, AUTHORIZATION);
 
 const filmsModel = new FilmsModel();
 
+const onResponce = () => {
+  navPresenter.init();
+  render(footerStatisticsElement, new FooterStatisticsView(filmsModel.getFilms().length));
+};
+
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
-    navPresenter.init();
-    render(footerStatisticsElement, new FooterStatisticsView(films.length));
+    onResponce();
   })
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
-    navPresenter.init();
-    render(footerStatisticsElement, new FooterStatisticsView(filmsModel.getFilms().length));
-
+    onResponce();
   });
 
 const userPresenter = new UserPresenter(siteHeaderElement, filmsModel);

@@ -1,9 +1,8 @@
 import FilmCardView from "../view/film-card.js";
 import {render, remove, replace} from "../utils/render.js";
-import {UpdateType, AUTHORIZATION, END_POINT} from "../const.js";
+import {UpdateType} from "../const.js";
 import CommentsModel from "../model/comments.js";
 import DetailsFilmPresenter from "./details-film.js";
-import ApiComments from "../api-comments.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -30,20 +29,7 @@ class Film {
 
   init(mainContainer, filmCard) {
     this._filmCard = filmCard;
-    this._filmId = filmCard.id;
     this._mainContainer = mainContainer;
-    this._isCommentsFail = false;
-
-    this._apiComments = new ApiComments(END_POINT, AUTHORIZATION, this._filmId);
-
-    this._apiComments.getComments()
-    .then((comments) => {
-      this._commentsModel.setComments(comments);
-    })
-    .catch(() => {
-      this._commentsModel.setComments([]);
-      this._isCommentsFail = true;
-    });
 
     this._commentsModel.addObserver(this._handleCommentsEvent);
 
@@ -81,7 +67,7 @@ class Film {
 
   _showDetails() {
     this._detailsFilmPresenter = new DetailsFilmPresenter(this._mainContainer, this._changeData, this._resetAllPopups);
-    this._detailsFilmPresenter.init(this._filmCard, this._commentsModel, this._isCommentsFail);
+    this._detailsFilmPresenter.init(this._filmCard, this._commentsModel);
   }
 
   _onFilmCardClick() {
@@ -91,6 +77,7 @@ class Film {
   }
 
   _handleToWatchlistClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(
@@ -104,6 +91,7 @@ class Film {
   }
 
   _handleWatchedClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(
@@ -117,6 +105,7 @@ class Film {
   }
 
   _handleFavoriteClick() {
+    this._resetAllPopups();
     this._changeData(
         UpdateType.MINOR,
         Object.assign(

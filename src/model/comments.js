@@ -6,8 +6,9 @@ class Comments extends Observer {
     this._comments = [];
   }
 
-  setComments(comments) {
+  setComments(comments, isSuccess) {
     this._comments = comments.slice();
+    this.isSuccess = isSuccess;
   }
 
   getComments() {
