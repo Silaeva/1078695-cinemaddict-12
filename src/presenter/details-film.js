@@ -89,26 +89,24 @@ class DetailsFilm {
         Object.assign({}, this._film, data));
   }
 
-  _onEscKeyDown(filmCard) {
-    this._changeData(
-        UpdateType.MINOR,
-        filmCard);
+  _onEscKeyDown() {
     this.destroy();
   }
 
-  _onCloseBtnClick(filmCard) {
-    this._changeData(
-        UpdateType.MINOR,
-        filmCard);
+  _onCloseBtnClick() {
     this.destroy();
   }
 
   _handleAddComment(comment) {
-    this._commentsModel.addComment(UpdateType.MINOR, comment);
+    this._apiComments.addComment(comment).then((response) => {
+      this._commentsModel.addComment(UpdateType.MINOR, response);
+    });
   }
 
   _handleDeleteComment(comment) {
-    this._commentsModel.deleteComment(UpdateType.MINOR, comment);
+    this._apiComments.deleteComment(comment).then(() => {
+      this._commentsModel.deleteComment(UpdateType.MINOR, comment);
+    });
   }
 }
 
