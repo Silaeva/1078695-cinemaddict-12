@@ -99,7 +99,8 @@ class DetailsFilm {
 
   _handleAddComment(comment) {
     this._apiComments.addComment(comment).then((response) => {
-      this._commentsModel.addComment(UpdateType.MINOR, response);
+      const newComment = response.comments[response.comments.length - 1];
+      this._commentsModel.addComment(UpdateType.MINOR, newComment);
     });
   }
 

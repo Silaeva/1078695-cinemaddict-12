@@ -118,17 +118,21 @@ class Film {
     );
   }
 
+
   _handleCommentsEvent() {
-    this._changeData(
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._filmCard,
-            {comments: this._commentsModel.getComments()}
-        )
+    const newComments = this._commentsModel.getComments().map((curComment) => curComment.id);
+
+    const newFilmCard = Object.assign(
+        {},
+        this._filmCard,
+        {comments: newComments}
     );
 
-    this._detailsFilmPresenter.init(this._filmCard, this._commentsModel);
+    this._changeData(
+        UpdateType.PATCH,
+        newFilmCard
+    );
+    this._detailsFilmPresenter.init(newFilmCard, this._commentsModel);
   }
 }
 
