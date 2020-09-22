@@ -14,17 +14,6 @@ class ApiComments {
       .then((comments) => comments.map(CommentsModel.adaptToClient));
   }
 
-  // updateComments(comment) {
-  //   return this._load({
-  //     url: `comments`,
-  //     method: Method.PUT,
-  //     body: JSON.stringify(CommentsModel.adaptToServer(comment)),
-  //     headers: new Headers({"Content-Type": `application/json`})
-  //   })
-  //     .then(ApiComments.toJSON)
-  //     .then(CommentsModel.adaptToClient);
-  // }
-
   addComment(comment) {
     return this._load({
       url: `comments/${this._filmId}`,

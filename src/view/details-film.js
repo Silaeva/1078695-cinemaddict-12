@@ -288,9 +288,13 @@ class DetailsFilm extends SmartView {
 
   _deleteClickHandler(evt) {
     evt.preventDefault();
+
+    evt.target.disabled = true;
+    evt.target.textContent = `Deleting...`;
+
     const currentCommentId = evt.target.closest(`.film-details__comment`).dataset.id;
     const currentComment = this._comments.filter((comment) => comment.id === currentCommentId);
-    this._callback.deleteClick(currentComment);
+    this._callback.deleteClick(currentComment, currentCommentId);
   }
 
   setDeleteCommentHandler(callback) {
