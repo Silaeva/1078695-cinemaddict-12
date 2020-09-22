@@ -25,13 +25,14 @@ class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCommentsEvent = this._handleCommentsEvent.bind(this);
+
+    this._commentsModel.addObserver(this._handleCommentsEvent);
   }
 
   init(mainContainer, filmCard) {
     this._filmCard = filmCard;
     this._mainContainer = mainContainer;
 
-    this._commentsModel.addObserver(this._handleCommentsEvent);
 
     const prevFilmCardComponent = this._filmCardComponent;
 
@@ -118,17 +119,21 @@ class Film {
     );
   }
 
+
   _handleCommentsEvent() {
-    this._changeData(
-        UpdateType.PATCH,
-        Object.assign(
-            {},
-            this._filmCard,
-            {comments: this._commentsModel.getComments()}
-        )
+    const newComments = this._commentsModel.getComments().map((curComment) => curComment.id);
+
+    const newFilmCard = Object.assign(
+        {},
+        this._filmCard,
+        {comments: newComments}
     );
 
-    this._detailsFilmPresenter.init(this._filmCard, this._commentsModel);
+    this._changeData(
+        UpdateType.PATCH,
+        newFilmCard
+    );
+    this._detailsFilmPresenter.init(newFilmCard, this._commentsModel);
   }
 }
 

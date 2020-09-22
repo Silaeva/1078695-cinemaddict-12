@@ -9,21 +9,29 @@ class ApiComments {
   }
 
   getComments() {
-    return this._load({url: `comments`})
+    return this._load({url: `comments/${this._filmId}`})
       .then(ApiComments.toJSON)
       .then((comments) => comments.map(CommentsModel.adaptToClient));
   }
 
-  updateComments(comment) {
+  addComment(comment) {
     return this._load({
-      url: `comments`,
-      method: Method.PUT,
+      url: `comments/${this._filmId}`,
+      method: Method.POST,
       body: JSON.stringify(CommentsModel.adaptToServer(comment)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(ApiComments.toJSON)
       .then(CommentsModel.adaptToClient);
   }
+
+  deleteComment([comment]) {
+    return this._load({
+      url: `comments/${comment.id}`,
+      method: Method.DELETE
+    });
+  }
+
 
   _load({
     url,
@@ -33,7 +41,7 @@ class ApiComments {
   }) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(`${this._endPoint}/${url}/${this._filmId}`,
+    return fetch(`${this._endPoint}/${url}`,
         {method, body, headers})
       .then(ApiComments.checkStatus)
       .catch(ApiComments.catchError);

@@ -3,6 +3,8 @@ import DetailsFilmView from "../view/details-film.js";
 import {UpdateType, AUTHORIZATION, END_POINT} from "../const.js";
 import ApiComments from "../api-comments.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 class DetailsFilm {
   constructor(mainContainer, changeData, resetAllPopups) {
     this._mainContainer = mainContainer;
@@ -44,7 +46,6 @@ class DetailsFilm {
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
     this._filmDetailsComponent = new DetailsFilmView(this._film, this._commentsModel);
-
 
     this._filmDetailsComponent.setWatchlistCardClickHandler(this._handleToWatchlistClick);
     this._filmDetailsComponent.setFavoriteCardClickHandler(this._handleFavoriteClick);
@@ -89,26 +90,55 @@ class DetailsFilm {
         Object.assign({}, this._film, data));
   }
 
-  _onEscKeyDown(filmCard) {
-    this._changeData(
-        UpdateType.MINOR,
-        filmCard);
+  _onEscKeyDown() {
     this.destroy();
   }
 
-  _onCloseBtnClick(filmCard) {
-    this._changeData(
-        UpdateType.MINOR,
-        filmCard);
+  _onCloseBtnClick() {
     this.destroy();
+  }
+
+  _blockForm(boolean) {
+    this._filmDetailsComponent.getElement().querySelectorAll(`INPUT`).forEach((input) => {
+      input.disabled = boolean;
+    });
+    this._filmDetailsComponent.getElement().querySelector(`TEXTAREA`).disabled = boolean;
+  }
+
+  _shake(element, callback) {
+    element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      element.style.animation = ``;
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _handleAddComment(comment) {
-    this._commentsModel.addComment(UpdateType.MINOR, comment);
+    this._blockForm(true);
+    this._apiComments.addComment(comment)
+    .then((response) => {
+      const newComment = response.comments[response.comments.length - 1];
+      this._commentsModel.addComment(UpdateType.MINOR, newComment);
+    })
+    .catch(() => {
+      this._shake(this._filmDetailsComponent.getElement(), () => {
+        this._blockForm(false);
+      });
+    });
   }
 
-  _handleDeleteComment(comment) {
-    this._commentsModel.deleteComment(UpdateType.MINOR, comment);
+  _handleDeleteComment(comment, currentCommentId) {
+    const deletingComment = this._filmDetailsComponent.getElement().querySelector(`.film-details__comment[data-id="${currentCommentId}"]`);
+
+    this._apiComments.deleteComment(comment)
+    .then(() => {
+      this._commentsModel.deleteComment(UpdateType.MINOR, comment);
+    })
+    .catch(() => {
+      this._shake(deletingComment, () => {
+        this.init(this._film, this._commentsModel);
+      });
+    });
   }
 }
 

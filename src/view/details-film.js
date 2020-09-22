@@ -1,4 +1,4 @@
-import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate, generateId} from "../utils/film.js";
+import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate} from "../utils/film.js";
 import {createElement, render} from "../utils/render.js";
 import {keyCode} from "../const.js";
 import CommentView from "../view/comment.js";
@@ -245,7 +245,7 @@ class DetailsFilm extends SmartView {
 
   _closeBtnHandler(evt) {
     evt.preventDefault();
-    this._callback.closeClick(this._filmCard);
+    this._callback.closeClick();
   }
 
   setCloseBtnHandler(callback) {
@@ -255,7 +255,7 @@ class DetailsFilm extends SmartView {
 
   _escPressHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this._callback.escPress(this._filmCard);
+      this._callback.escPress();
       document.removeEventListener(`keydown`, this._escPressHandler);
     }
   }
@@ -269,11 +269,8 @@ class DetailsFilm extends SmartView {
     if (evt.keyCode === keyCode.ENTER && (evt.ctrlKey || evt.metaKey)) {
       const message = this.getElement().querySelector(`.film-details__comment-input`).value.trim();
       const emoji = this.getElement().querySelector(`.film-details__add-emoji-img`).dataset.emoji;
-
       if (message && emoji) {
         const newComment = {
-          id: generateId(),
-          author: `User`,
           emotion: emoji,
           text: message,
           date: getFormatCommentDate(new Date())
@@ -291,9 +288,13 @@ class DetailsFilm extends SmartView {
 
   _deleteClickHandler(evt) {
     evt.preventDefault();
+
+    evt.target.disabled = true;
+    evt.target.textContent = `Deleting...`;
+
     const currentCommentId = evt.target.closest(`.film-details__comment`).dataset.id;
-    const currentComment = this._comments.filter((comment) => comment.id === +currentCommentId);
-    this._callback.deleteClick(currentComment);
+    const currentComment = this._comments.filter((comment) => comment.id === currentCommentId);
+    this._callback.deleteClick(currentComment, currentCommentId);
   }
 
   setDeleteCommentHandler(callback) {
