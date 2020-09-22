@@ -25,13 +25,14 @@ class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCommentsEvent = this._handleCommentsEvent.bind(this);
+
+    this._commentsModel.addObserver(this._handleCommentsEvent);
   }
 
   init(mainContainer, filmCard) {
     this._filmCard = filmCard;
     this._mainContainer = mainContainer;
 
-    this._commentsModel.addObserver(this._handleCommentsEvent);
 
     const prevFilmCardComponent = this._filmCardComponent;
 
