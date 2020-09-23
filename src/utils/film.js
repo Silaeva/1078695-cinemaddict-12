@@ -1,5 +1,4 @@
 import moment from "moment";
-
 import {MAX_DESCRIPTION_LENGTH} from "../const.js";
 
 const cropDescription = (text) => {

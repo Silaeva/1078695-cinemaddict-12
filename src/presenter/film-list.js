@@ -235,8 +235,9 @@ class FilmList {
 
     const filmCards = this._getFilms();
     const filmsCount = filmCards.length;
+    const allFilmscount = this._filmsModel.getFilms().length;
 
-    if (filmsCount === 0) {
+    if (allFilmscount === 0) {
       this._renderNoFilms();
       return;
     }
@@ -255,14 +256,21 @@ class FilmList {
   }
 
   _renderExtra() {
-    render(this._filmsSectionComponent, this._filmsListTopRatedComponent);
-    render(this._filmsSectionComponent, this._filmsListMostCommentedComponent);
+    const filmCards = this._filmsModel.getFilms();
+    const isAllFilmsNotRated = filmCards.every((film) => film.rating === 0);
+    const isAllFilmsNotCommented = filmCards.every((film) => film.comments.length === 0);
 
-    const topRatedFilmCards = this._getFilms().slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
-    const mostCommentedFilmCards = this._getFilms().slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
+    if (!isAllFilmsNotRated) {
+      render(this._filmsSectionComponent, this._filmsListTopRatedComponent);
+      const topRatedFilmCards = filmCards.slice().sort((a, b) => b.rating - a.rating).splice(0, CountCards.EXTRA);
+      topRatedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListTopRatedComponent, filmCard, this._filmTopRatedPresenter));
+    }
 
-    topRatedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListTopRatedComponent, filmCard, this._filmTopRatedPresenter));
-    mostCommentedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListMostCommentedComponent, filmCard, this._filmMostCommentedPresenter));
+    if (!isAllFilmsNotCommented) {
+      render(this._filmsSectionComponent, this._filmsListMostCommentedComponent);
+      const mostCommentedFilmCards = filmCards.slice().sort((a, b) => b.comments.length - a.comments.length).splice(0, CountCards.EXTRA);
+      mostCommentedFilmCards.forEach((filmCard) => this._renderFilm(this._filmsListMostCommentedComponent, filmCard, this._filmMostCommentedPresenter));
+    }
   }
 }
 

@@ -1,3 +1,9 @@
+const rankCount = {
+  NOVICE_TO: 10,
+  FAN_TO: 20,
+  MOVIE_BUFF_FROM: 21
+};
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -24,11 +30,11 @@ const getRandomDate = (start, end) => {
 
 const getProfileRating = (watchedFilms) => {
   let profileRating = ``;
-  if (watchedFilms > 0 && watchedFilms <= 10) {
+  if (watchedFilms > 0 && watchedFilms <= rankCount.NOVICE_TO) {
     profileRating = `novice`;
-  } else if (watchedFilms >= 11 && watchedFilms <= 20) {
+  } else if (watchedFilms > rankCount.NOVICE_TO && watchedFilms <= rankCount.FAN_TO) {
     profileRating = `fan`;
-  } else if (watchedFilms >= 21) {
+  } else if (watchedFilms >= rankCount.MOVIE_BUFF_FROM) {
     profileRating = `movie buff`;
   }
   return profileRating;

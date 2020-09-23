@@ -17,8 +17,8 @@ class DetailsFilm {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
 
-    this._onCloseBtnClick = this._onCloseBtnClick.bind(this);
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._closeBtnHandler = this._closeBtnHandler.bind(this);
+    this._escPressHandler = this._escPressHandler.bind(this);
     this._handleAddComment = this._handleAddComment.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
   }
@@ -50,8 +50,8 @@ class DetailsFilm {
     this._filmDetailsComponent.setWatchlistCardClickHandler(this._handleToWatchlistClick);
     this._filmDetailsComponent.setFavoriteCardClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setWatchedCardClickHandler(this._handleWatchedClick);
-    this._filmDetailsComponent.setCloseBtnHandler(this._onCloseBtnClick);
-    this._filmDetailsComponent.setEscPressHandler(this._onEscKeyDown);
+    this._filmDetailsComponent.setCloseBtnHandler(this._closeBtnHandler);
+    this._filmDetailsComponent.setEscPressHandler(this._escPressHandler);
     this._filmDetailsComponent.setAddCommentHandler(this._handleAddComment);
     this._filmDetailsComponent.setDeleteCommentHandler(this._handleDeleteComment);
 
@@ -90,11 +90,11 @@ class DetailsFilm {
         Object.assign({}, this._film, data));
   }
 
-  _onEscKeyDown() {
+  _escPressHandler() {
     this.destroy();
   }
 
-  _onCloseBtnClick() {
+  _closeBtnHandler() {
     this.destroy();
   }
 

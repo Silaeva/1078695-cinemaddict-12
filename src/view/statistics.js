@@ -7,6 +7,7 @@ import Chart from "chart.js";
 import moment from "moment";
 
 const BAR_HEIGHT = 50;
+const MINUTES_IN_HOUR = 60;
 
 const Filters = {
   ALL: `all-time`,
@@ -21,8 +22,8 @@ const createTotalDurationTemplate = (films) => {
     return acc + film.duration;
   }, 0);
 
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
+  const hours = Math.floor(totalMinutes / MINUTES_IN_HOUR);
+  const minutes = totalMinutes % MINUTES_IN_HOUR;
 
   return (
     `<p class="statistic__item-text">${hours}<span class="statistic__item-description">h</span> ${minutes} <span class="statistic__item-description">m</span></p>`
