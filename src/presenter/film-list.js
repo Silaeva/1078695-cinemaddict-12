@@ -14,11 +14,11 @@ import {render, remove} from "../utils/render.js";
 import {nav} from "../utils/nav.js";
 
 class FilmList {
-  constructor(filmsContainer, filmsModel, navModel, api) {
+  constructor(filmsContainer, filmsModel, navModel, apiFilms) {
     this._filmsContainer = filmsContainer;
     this._filmsModel = filmsModel;
     this._navModel = navModel;
-    this._api = api;
+    this._apiFilms = apiFilms;
     this._renderedFilmCards = CountCards.PER_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
@@ -78,7 +78,7 @@ class FilmList {
   }
 
   _handleViewAction(updateType, update) {
-    this._api.updateFilm(update).then((response) => {
+    this._apiFilms.updateFilm(update).then((response) => {
       this._filmsModel.updateFilm(updateType, response);
     });
   }
@@ -235,9 +235,8 @@ class FilmList {
 
     const filmCards = this._getFilms();
     const filmsCount = filmCards.length;
-    const allFilmscount = this._filmsModel.getFilms().length;
 
-    if (allFilmscount === 0) {
+    if (filmsCount === 0) {
       this._renderNoFilms();
       return;
     }
@@ -248,7 +247,7 @@ class FilmList {
 
     this._renderFilms(filmCards.slice(0, Math.min(filmsCount, this._renderedFilmCards)));
 
-    if (filmsCount > CountCards.PER_STEP) {
+    if (filmsCount > CountCards.PER_STEP && filmsCount > this._renderedFilmCards) {
       this._renderShowMoreButton();
     }
 

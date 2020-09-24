@@ -2,7 +2,7 @@ import {render, remove, replace} from "../utils/render.js";
 import {getProfileRating} from "../utils/common.js";
 import UserView from "../view/user.js";
 
-export default class User {
+class User {
   constructor(headerContainer, filmsModel) {
     this._headerContainer = headerContainer;
     this._filmsModel = filmsModel;
@@ -44,3 +44,5 @@ export default class User {
     return user;
   }
 }
+
+export default User;

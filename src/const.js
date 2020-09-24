@@ -67,4 +67,12 @@ const SuccessHTTPStatusRange = {
 const AUTHORIZATION = `Basic fklchnslekfhwsecf56weuyvhblehf78`;
 const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
-export {MAX_DESCRIPTION_LENGTH, RenderPosition, SortType, NavType, UpdateType, UserAction, keyCode, FilterType, Method, SuccessHTTPStatusRange, AUTHORIZATION, END_POINT, CountCards};
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
+const rankCount = {
+  NOVICE_TO: 10,
+  FAN_TO: 20,
+  MOVIE_BUFF_FROM: 21
+};
+
+export {MAX_DESCRIPTION_LENGTH, RenderPosition, SortType, NavType, UpdateType, UserAction, keyCode, FilterType, Method, SuccessHTTPStatusRange, AUTHORIZATION, END_POINT, CountCards, SHAKE_ANIMATION_TIMEOUT, rankCount};

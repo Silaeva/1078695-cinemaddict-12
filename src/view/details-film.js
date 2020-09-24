@@ -1,4 +1,5 @@
-import {getFormatDuration, getFormatReleaseDate, getFormatCommentDate} from "../utils/film.js";
+import {getFormatDuration, getFormatReleaseDate} from "../utils/film.js";
+import {shake} from "../utils/common.js";
 import {createElement, render} from "../utils/render.js";
 import {keyCode} from "../const.js";
 import CommentView from "../view/comment.js";
@@ -7,7 +8,7 @@ import SmartView from "./smart.js";
 const createFilmDetailsTemplate = (filmCard, isCommentsSuccess) => {
   const {title, titleOriginal, rating, director, writers, actors, releaseDate, country, duration, genres, poster, description, onWatchList, isWatched, isFavorite, ageRating, comments} = filmCard;
 
-  const genreTitle = genres.length > 1 ? `genres` : `genre`;
+  const genreTitle = genres.length > 1 ? `Genres` : `Genre`;
 
   const createGenresTemplate = (genreItems) => {
     return genreItems.map((genreItem) => `<span class="film-details__genre">${genreItem}</span>`).join(``);
@@ -266,14 +267,18 @@ class DetailsFilm extends SmartView {
   }
 
   _addCommentHandler(evt) {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+
     if (evt.keyCode === keyCode.ENTER && (evt.ctrlKey || evt.metaKey)) {
-      const message = this.getElement().querySelector(`.film-details__comment-input`).value.trim();
-      const emoji = this.getElement().querySelector(`.film-details__add-emoji-img`).dataset.emoji;
-      if (message && emoji) {
+      const message = this.getElement().querySelector(`.film-details__comment-input`);
+      const emoji = this.getElement().querySelector(`.film-details__add-emoji-img`);
+      if (!message.value || !emoji) {
+        shake(form);
+      } else {
         const newComment = {
-          emotion: emoji,
-          text: message,
-          date: getFormatCommentDate(new Date())
+          emotion: emoji.dataset.emoji,
+          text: message.value.trim(),
+          date: new Date()
         };
 
         this._callback.addComment(newComment);

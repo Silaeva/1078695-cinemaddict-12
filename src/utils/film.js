@@ -32,9 +32,7 @@ const getFormatDuration = (duration) => {
 };
 
 const getFormatCommentDate = (date) => {
-  return moment(date).format(`YYYY/MM/DD hh:mm`);
+  return moment(date).fromNow();
 };
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
-
-export {cropDescription, sortFilmByReleaseDate, sortFilmByRating, getFormatReleaseDate, getFormatReleaseYear, getFormatCommentDate, getFormatDuration, generateId};
+export {cropDescription, sortFilmByReleaseDate, sortFilmByRating, getFormatReleaseDate, getFormatReleaseYear, getFormatCommentDate, getFormatDuration};

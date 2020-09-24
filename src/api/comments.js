@@ -1,8 +1,10 @@
-import CommentsModel from "./model/comments.js";
-import {Method, SuccessHTTPStatusRange} from "./const.js";
+import CommentsModel from "../model/comments.js";
+import {Method} from "../const.js";
+import ApiAbstract from "./abstract.js";
 
-class ApiComments {
+class ApiComments extends ApiAbstract {
   constructor(endPoint, authorization, filmId) {
+    super();
     this._endPoint = endPoint;
     this._authorization = authorization;
     this._filmId = filmId;
@@ -30,40 +32,6 @@ class ApiComments {
       url: `comments/${comment.id}`,
       method: Method.DELETE
     });
-  }
-
-
-  _load({
-    url,
-    method = Method.GET,
-    body = null,
-    headers = new Headers()
-  }) {
-    headers.append(`Authorization`, this._authorization);
-
-    return fetch(`${this._endPoint}/${url}`,
-        {method, body, headers})
-      .then(ApiComments.checkStatus)
-      .catch(ApiComments.catchError);
-  }
-
-  static checkStatus(response) {
-    if (
-      response.status < SuccessHTTPStatusRange.MIN &&
-      response.status > SuccessHTTPStatusRange.MAX
-    ) {
-      throw new Error(`${response.status}: ${response.statusText}`);
-    }
-
-    return response;
-  }
-
-  static toJSON(response) {
-    return response.json();
-  }
-
-  static catchError(err) {
-    throw err;
   }
 }
 
