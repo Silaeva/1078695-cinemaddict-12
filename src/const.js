@@ -75,4 +75,10 @@ const rankCount = {
   MOVIE_BUFF_FROM: 21
 };
 
-export {MAX_DESCRIPTION_LENGTH, RenderPosition, SortType, NavType, UpdateType, UserAction, keyCode, FilterType, Method, SuccessHTTPStatusRange, AUTHORIZATION, END_POINT, CountCards, SHAKE_ANIMATION_TIMEOUT, rankCount};
+const UserRank = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie buff`
+};
+
+export {MAX_DESCRIPTION_LENGTH, RenderPosition, SortType, NavType, UpdateType, UserAction, keyCode, FilterType, Method, SuccessHTTPStatusRange, AUTHORIZATION, END_POINT, CountCards, SHAKE_ANIMATION_TIMEOUT, rankCount, UserRank};

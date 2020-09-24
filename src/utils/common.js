@@ -1,13 +1,13 @@
-import {SHAKE_ANIMATION_TIMEOUT, rankCount} from "../const.js";
+import {SHAKE_ANIMATION_TIMEOUT, rankCount, UserRank} from "../const.js";
 
 const getProfileRating = (watchedFilms) => {
   let profileRating = ``;
   if (watchedFilms > 0 && watchedFilms <= rankCount.NOVICE_TO) {
-    profileRating = `Novice`;
+    profileRating = UserRank.NOVICE;
   } else if (watchedFilms > rankCount.NOVICE_TO && watchedFilms <= rankCount.FAN_TO) {
-    profileRating = `Fan`;
+    profileRating = UserRank.FAN;
   } else if (watchedFilms >= rankCount.MOVIE_BUFF_FROM) {
-    profileRating = `Movie buff`;
+    profileRating = UserRank.MOVIE_BUFF;
   }
   return profileRating;
 };
