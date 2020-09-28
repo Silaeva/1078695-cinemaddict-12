@@ -25,6 +25,16 @@ class ApiFilms extends ApiAbstract {
       .then(ApiFilms.toJSON)
       .then(FilmsModel.adaptToClient);
   }
+
+  sync(films) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(films),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(ApiFilms.toJSON);
+  }
 }
 
 export default ApiFilms;
