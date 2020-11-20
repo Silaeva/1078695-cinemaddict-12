@@ -4,7 +4,6 @@
 * Наставник: [Иван Шалагин](https://htmlacademy.ru/profile/id386947).
 
 ---
-
 _Не удаляйте и не изменяйте папки и файлы:_
 _`.editorconfig`, `.gitattributes`, `.travis.yml`._
 
